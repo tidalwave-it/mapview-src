@@ -1,0 +1,92 @@
+#*
+ * *************************************************************************************************************************************************************
+ *
+ * MapView: a JavaFX control for map rendering
+ * http://tidalwave.it/projects/mapview
+ *
+ * Copyright (C) 2024 - 2025 by Tidalwave s.a.s. (http://tidalwave.it)
+ *
+ * *************************************************************************************************************************************************************
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
+ *
+ * *************************************************************************************************************************************************************
+ *
+ * git clone https://bitbucket.org/tidalwave/mapview-src
+ * git clone https://github.com/tidalwave-it/mapview-src
+ *
+ * *************************************************************************************************************************************************************
+ *#
+#set ($project_cc = $context.get("tidalwave.ci.view"))
+#set ($project_lc = ${project_cc.toLowerCase()})
+#set ($build_status = "https://img.shields.io/jenkins/s/http/services.tidalwave.it/ci/job/" + $project_cc + "_Build_from_Scratch.svg")
+#set ($ci_view = "https://services.tidalwave.it/ci/job/" + $project_cc)
+#set ($test_status = "https://img.shields.io/jenkins/t/http/services.tidalwave.it/ci/job/" + $project_cc + ".svg")
+#set ($coverage_status = "https://img.shields.io/jenkins/c/http/services.tidalwave.it/ci/job/" + $project_cc + ".svg")
+
+[![Maven Central](https://img.shields.io/maven-central/v/${project.groupId}/${project.artifactId}.svg)]()
+[![Build Status]($build_status)]($ci_view)
+[![Test Status]($test_status)]($ci_view)
+[![Coverage]($coverage_status)]($ci_view)
+
+
+#[[##]]# Introduction
+
+${project.description}
+
+${project.name} is **licensed** with the Apache license.
+
+
+#[[##]]# General information
+
+#[[###]]# Artifact coordinates
+
+To use MapView in your Maven project, use the following POM snippet:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}/groupId>
+  <artifactId>mapview-javafx</artifactId>
+  <version>${mapview.version}</version>
+</dependency>
+```
+
+For other build systems, see [this document]($context.get("tidalwave.project.url")/latest/dependency-info.html).
+
+
+#[[###]]# Sources, issue tracker and continuous integration
+
+The primary source repository is on **[Bitbucket]($context.get("scm.repo.browse.url"))**; a secondary repository (synchronized in real time) is available on
+**[GitHub]($context.get("tidalwave.github.browse.url"))**.
+
+To checkout sources from Bitbucket:
+
+```shell
+git clone $context.get("scm.repo.readonly.url")
+```
+
+To checkout sources from GitHub:
+
+```shell
+git clone $context.get("tidalwave.github.readonly.url")
+```
+
+The issue tracker is hosted on the Atlassian Jira Cloud:
+
++ ${project.issueManagement.url}
+
+The **continuous integration** is available at:
+
++ Tidalwave CI server (primary): ${project.ciManagement.url}
+
+
+#[[###]]# API documentation
+
+[Javadoc]($context.get("tidalwave.project.url")/latest/it-tidalwave-mapview-modules/mapview-javafx/apidocs/index.html)
+

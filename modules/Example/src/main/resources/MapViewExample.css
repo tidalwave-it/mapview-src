@@ -1,0 +1,33 @@
+.tool-bar .button,
+#lbZoom,
+#lbCenterCoordinates,
+#lbArea,
+#lbCoordinates
+  {
+    -fx-text-fill:          white;
+    -fx-background-color:   transparent;
+  }
+
+#tbToolBar
+  {
+    -fx-background-color:   rgb(0,0,0,0.6);
+  }
+
+#lbCenterCoordinates,
+#lbCoordinates
+  {
+    -fx-min-width:          150px;
+    -fx-text-alignment:     left;
+  }
+
+#lbArea
+  {
+    -fx-min-width:          350px;
+    -fx-text-alignment:     left;
+  }
+
+#lbZoom
+  {
+    -fx-min-width:          20px;
+    -fx-text-alignment:     left;
+  }

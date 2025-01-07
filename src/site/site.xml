@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+ * *************************************************************************************************************************************************************
+ *
+ * MapView: a JavaFX control for map rendering
+ * http://tidalwave.it/projects/mapview
+ *
+ * Copyright (C) 2024 - 2025 by Tidalwave s.a.s. (http://tidalwave.it)
+ *
+ * *************************************************************************************************************************************************************
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
+ *
+ * *************************************************************************************************************************************************************
+ *
+ * git clone https://bitbucket.org/tidalwave/mapview-src
+ * git clone https://github.com/tidalwave-it/mapview-src
+ *
+ * *************************************************************************************************************************************************************
+
+-->
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
+    <bannerLeft name="${project.name}" href="https://tidalwave.it">
+        <image src="http://tidalwave.it/media/Tidalwave%20Logo.png" />
+    </bannerLeft>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>${tft.maven-fluido-skin.version}</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>false</sideBarEnabled>
+            <topBarContainerStyle>width: 90%;</topBarContainerStyle>
+            <googleSearch>
+                <sitesearch>${project.url}</sitesearch>
+            </googleSearch>
+            <gitHub>
+                <projectId>tidalwave-it/mapview-src</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>gray</ribbonColor>
+            </gitHub>
+        </fluidoSkin>
+    </custom>
+
+    <body>
+        <menu ref="reports" inherit="bottom"/>
+
+        <menu name="Overview">
+            <item name="Introduction" href="index.html"/>
+        </menu>
+    </body>
+</site>

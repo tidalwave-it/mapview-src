@@ -1,0 +1,16 @@
+target/
+.repository
+.description
+.classpath
+.project
+.settings
+release.properties
+.orig.*
+.orig
+.chg.*
+.rej
+.DS_Store
+*.iml
+Maven__*.xml
+.maven-local-env
+/.idea/

@@ -100,6 +100,9 @@ public class MapViewExampleController
     private Button btShowAleutian;
 
     @FXML
+    private Button btZeroZero;
+
+    @FXML
     private Button btReframe;
 
     @FXML
@@ -154,6 +157,7 @@ public class MapViewExampleController
         btShowFrance.setOnAction(event -> mapView.fitArea(FRANCE));
         btShowSwitzerland.setOnAction(event -> mapView.fitArea(SWITZERLAND));
         btShowAleutian.setOnAction(event -> mapView.fitArea(ALEUTIAN));
+        btZeroZero.setOnAction(event -> mapView.setCenter(MapCoordinates.of(0, 0)));
         btOSM.setOnAction(event -> mapView.setTileSource(osm));
         btOTM.setOnAction(event -> mapView.setTileSource(otm));
         btReframe.setOnAction(event -> renderTrack());

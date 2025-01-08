@@ -245,6 +245,9 @@ public class MapView extends Region
     /** The latest value in scroll. */
     private double scroll;
 
+    /** A guard to manage reentrant calls to {@link #setCenterAndZoom(MapCoordinates, double)}. */
+    private boolean reentrantGuard;
+
     /***********************************************************************************************************************************************************
      * Creates a new instance.
      * @param   options         options for the control
@@ -533,21 +536,33 @@ public class MapView extends Region
       }
 
     /***********************************************************************************************************************************************************
-     * Sets both the center and the zoom level.
+     * Sets both the center and the zoom level. This method has got a reentrant protection since it touches the {@link #center} and {@link #zoom} properties,
+     * that in turn will fire events that call back this method, the first time with the previous zoom level. There's no way to change them atomically.
      * @param   center        the center
      * @param   zoom          the zoom level
      **********************************************************************************************************************************************************/
     private void setCenterAndZoom (@Nonnull final MapCoordinates center, final double zoom)
       {
-        log.trace("setCenterAndZoom({}, {})", center, zoom);
-
-        if (!center.equals(tileGrid.getCenter()) || doubleToLongBits(zoom) != doubleToLongBits(model.zoom()))
+        if (!reentrantGuard)
           {
-            tileCache.retainPendingTiles((int)zoom);
-            tileGrid.setCenterAndZoom(center, zoom);
-            this.center.set(center);
-            this.zoom.set(zoom);
-            area.set(model.getArea());
+            try
+              {
+                reentrantGuard = true;
+                log.trace("setCenterAndZoom({}, {})", center, zoom);
+
+                if (!center.equals(tileGrid.getCenter()) || doubleToLongBits(zoom) != doubleToLongBits(model.zoom()))
+                  {
+                    tileCache.retainPendingTiles((int)zoom);
+                    tileGrid.setCenterAndZoom(center, zoom);
+                    this.center.set(center);
+                    this.zoom.set(zoom);
+                    area.set(model.getArea());
+                  }
+              }
+            finally // defensive
+              {
+                reentrantGuard = false;
+              }
           }
       }
 

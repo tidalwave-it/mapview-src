@@ -36,7 +36,6 @@
     </parent>
 
     <artifactId>mapview-example</artifactId>
-    <version>1.0-ALPHA-2-SNAPSHOT</version>
     <name>MapView :: Example</name>
     <description>
         A simple example demonstrating the MapView control.

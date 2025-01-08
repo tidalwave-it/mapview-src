@@ -5,7 +5,7 @@
     <parent>
         <groupId>it.tidalwave.mapview</groupId>
         <artifactId>it-tidalwave-mapview-modules</artifactId>
-        <version>1.0-ALPHA-1</version>
+        <version>1.0-ALPHA-2-SNAPSHOT</version>
     </parent>
 
     <artifactId>mapview-example</artifactId>

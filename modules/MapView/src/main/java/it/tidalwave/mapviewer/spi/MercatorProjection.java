@@ -26,6 +26,7 @@
 package it.tidalwave.mapviewer.spi;
 
 import jakarta.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.tidalwave.mapviewer.MapCoordinates;
 import it.tidalwave.mapviewer.MapPoint;
 import it.tidalwave.mapviewer.Projection;
@@ -66,7 +67,7 @@ public class MercatorProjection implements Projection
     /***********************************************************************************************************************************************************
      * {@inheritDoc}
      **********************************************************************************************************************************************************/
-    @Override @Nonnull
+    @Override @Nonnull @SuppressFBWarnings("FL_FLOATS_AS_LOOP_COUNTERS")
     public MapCoordinates mapPointToCoordinates (@Nonnull final MapPoint mapPoint, final double zoomLevel)
       {
         final double arc = arc(zoomLevel);
@@ -76,13 +77,14 @@ public class MercatorProjection implements Projection
         double lon = toDegrees(metersX / EARTH_RADIUS);
         final double lat = toDegrees(asin((exp - 1) / (exp + 1)));
 
-        if (lon <= -180)
+        while (lon <= -180)
           {
-            lon = 360 + lon;
+            lon += 360;
           }
-        else if (lon > 180)
+
+        while (lon > 180)
           {
-            lon = lon - 360;
+            lon -= 360;
           }
 
         return MapCoordinates.of(lat, lon);

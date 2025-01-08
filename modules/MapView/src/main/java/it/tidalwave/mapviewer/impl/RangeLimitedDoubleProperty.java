@@ -54,7 +54,7 @@ public class RangeLimitedDoubleProperty extends SimpleDoubleProperty
      **********************************************************************************************************************************************************/
     public RangeLimitedDoubleProperty (@Nonnull final Object bean, @Nonnull final String name, final double initialValue, final double min, final double max)
       {
-        super(bean, name, Math.min(Math.max(min, initialValue), max));
+        super(bean, name, Math.clamp(initialValue, min, max));
         this.min = min;
         this.max = max;
       }
@@ -65,7 +65,7 @@ public class RangeLimitedDoubleProperty extends SimpleDoubleProperty
     @Override
     public void set (final double value)
       {
-        super.set(Math.min(Math.max(min, value), max));
+        super.set(Math.clamp(value, min, max));
       }
 
     /***********************************************************************************************************************************************************
@@ -75,7 +75,7 @@ public class RangeLimitedDoubleProperty extends SimpleDoubleProperty
     public void setValue (@Nullable final Number value)
       {
         Objects.requireNonNull(value, "value");
-        super.setValue(Math.min(Math.max(min, value.doubleValue()), max));
+        super.setValue(Math.clamp(value.doubleValue(), min, max));
       }
 
     /***********************************************************************************************************************************************************

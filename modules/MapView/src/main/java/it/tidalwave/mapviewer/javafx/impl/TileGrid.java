@@ -41,6 +41,7 @@ import it.tidalwave.mapviewer.impl.MapViewModel;
 import it.tidalwave.mapviewer.javafx.MapView;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import static java.lang.Double.doubleToLongBits;
 
 /***************************************************************************************************************************************************************
  *
@@ -114,16 +115,20 @@ public class TileGrid extends StackPane
      * Sets the coordinates at the center of the grid and the zoom level. This method will update the tiles in the grid with the proper URLs for the required
      * setting. If the grid is already populated, existing tiles are recycled if possible (this is useful while moving the coordinates in order to avoid the
      * number of tiles to download for the next position).
-     * @param  coordinates   the coordinates at the center of the tile
-     * @param  zoomLevel     the zoom level
+     * @param  center       the center at the center of the tile
+     * @param  zoom         the zoom level
      **********************************************************************************************************************************************************/
-    public void setCenterAndZoom (@Nonnull final MapCoordinates coordinates, final double zoomLevel)
+    public void setCenterAndZoom (@Nonnull final MapCoordinates center, final double zoom)
       {
-        log.debug("setCenterAndZoom({}, {})", coordinates, zoomLevel);
-        model.setCenterAndZoom(coordinates, zoomLevel);
-        createTiles();
-        recreateOverlays();
-        setDirty(Dirty.ALL);
+        log.debug("setCenterAndZoom({}, {})", center, zoom);
+
+        if (!center.equals(model.center()) || doubleToLongBits(zoom) != doubleToLongBits(model.zoom())) // defensive
+          {
+            model.setCenterAndZoom(center, zoom);
+            createTiles();
+            recreateOverlays();
+            setDirty(Dirty.ALL);
+          }
       }
 
     /***********************************************************************************************************************************************************

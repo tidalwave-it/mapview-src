@@ -23,7 +23,7 @@
  *
  * *************************************************************************************************************************************************************
  */
-package it.tidalwave.mapviewer.javafx.impl;
+package it.tidalwave.mapviewer.impl;
 
 import jakarta.annotation.Nonnull;
 import lombok.EqualsAndHashCode;

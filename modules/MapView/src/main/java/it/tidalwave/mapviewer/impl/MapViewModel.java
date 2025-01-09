@@ -34,7 +34,6 @@ import it.tidalwave.mapviewer.MapPoint;
 import it.tidalwave.mapviewer.MapViewPoint;
 import it.tidalwave.mapviewer.TileSource;
 import it.tidalwave.mapviewer.javafx.MapView;
-import it.tidalwave.mapviewer.javafx.impl.TilePos;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;

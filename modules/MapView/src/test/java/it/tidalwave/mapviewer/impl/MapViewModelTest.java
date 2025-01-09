@@ -32,7 +32,6 @@ import it.tidalwave.mapviewer.MapCoordinates;
 import it.tidalwave.mapviewer.MapPoint;
 import it.tidalwave.mapviewer.OpenStreetMapTileSource;
 import it.tidalwave.mapviewer.TileSource;
-import it.tidalwave.mapviewer.javafx.impl.TilePos;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;

@@ -149,7 +149,7 @@ public class MapViewExampleController
         mapView.centerProperty().addListener((_1, _2, coordinates) -> lbCenterCoordinates.setText(coordinates.toString()));
         mapView.zoomProperty().addListener((_1, _2, zoom) -> lbZoom.setText(Integer.toString(zoom.intValue())));
         mapView.areaProperty().addListener((_1, _2, area) -> lbArea.setText(area.toString()));
-        mapView.coordinatesUnderMouseProperty().addListener((_1, _2, coordinates) -> lbCoordinates.setText(coordinates.toString()));
+        mapView.mouseCoordinatesProperty().addListener((_1, _2, coordinates) -> lbCoordinates.setText(coordinates.toString()));
         btZoomIn.setOnAction(event -> mapView.setZoom(mapView.getZoom() + 1));
         btZoomOut.setOnAction(event -> mapView.setZoom(mapView.getZoom() - 1));
         btReset.setOnAction(event -> { mapView.setCenter(START); mapView.setZoom(START_ZOOM); });

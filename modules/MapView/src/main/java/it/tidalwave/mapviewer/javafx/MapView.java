@@ -91,7 +91,7 @@ import static javafx.util.Duration.ZERO;
  * <ul>
  *   <li>{@link #minZoomProperty()} (read only): the minimum zoom level allowed;</li>
  *   <li>{@link #maxZoomProperty()} (read only): the maximum zoom level allowed;</li>
- *   <li>{@link #coordinatesUnderMouseProperty()} (read only): the coordinates corresponding to the point where the mouse is;</li>
+ *   <li>{@link #mouseCoordinatesProperty()} (read only): the coordinates corresponding to the point where the mouse is;</li>
  *   <li>{@link #areaProperty()} (read only): the rectangular area delimited by north, east, south, west coordinates that is currently rendered.</li>
  * </ul>
  *
@@ -232,7 +232,7 @@ public class MapView extends Region
 
     /** The coordinates corresponding to the mouse position on the map. */
     @Nonnull
-    private final SimpleObjectProperty<MapCoordinates> coordinatesUnderMouse;
+    private final SimpleObjectProperty<MapCoordinates> mouseCoordinates;
 
     /** The rectangular area in the view. */
     @Nonnull
@@ -300,7 +300,7 @@ public class MapView extends Region
         zoom = new RangeLimitedDoubleProperty(this, "zoom", model.zoom(), tileSource.get().getMinZoomLevel(), tileSource.get().getMaxZoomLevel());
         minZoom = new SimpleDoubleProperty(this, "minZoom", tileSource.get().getMinZoomLevel());
         maxZoom = new SimpleDoubleProperty(this, "maxZoom", tileSource.get().getMaxZoomLevel());
-        coordinatesUnderMouse = new SimpleObjectProperty<>(this, "coordinatesUnderMouse", MapCoordinates.of(0, 0));
+        mouseCoordinates = new SimpleObjectProperty<>(this, "mouseCoordinates", MapCoordinates.of(0, 0));
         area = new SimpleObjectProperty<>(this, "area", MapArea.of(0, 0, 0, 0));
         tileSource.addListener((_1, _2, _3) -> onTileSourceChanged());
         center.addListener((_1, _2, newValue) -> setCenterAndZoom(newValue, zoom.get()));
@@ -476,9 +476,9 @@ public class MapView extends Region
      * {@return the coordinates corresponding to the point where the mouse is}.
      **********************************************************************************************************************************************************/
     @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP")
-    public final ObjectProperty<MapCoordinates> coordinatesUnderMouseProperty()
+    public final ObjectProperty<MapCoordinates> mouseCoordinatesProperty ()
       {
-        return coordinatesUnderMouse;
+        return mouseCoordinates;
       }
 
     /***********************************************************************************************************************************************************
@@ -684,7 +684,7 @@ public class MapView extends Region
      **********************************************************************************************************************************************************/
     private void onMouseMoved (@Nonnull final MouseEvent event)
       {
-        coordinatesUnderMouse.set(pointToCoordinates(MapViewPoint.of(event)));
+        mouseCoordinates.set(pointToCoordinates(MapViewPoint.of(event)));
       }
 
     /***********************************************************************************************************************************************************

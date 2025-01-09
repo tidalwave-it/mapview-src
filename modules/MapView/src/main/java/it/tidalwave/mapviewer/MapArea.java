@@ -60,6 +60,7 @@ public class MapArea
      * @param   west      the west limit
      * @throws            IllegalArgumentException when the values are unfeasible
      **********************************************************************************************************************************************************/
+    @Nonnull
     public static MapArea of (final double north, final double east, final double south, final double west)
       {
         checkLatitude(north, "north");
@@ -112,7 +113,7 @@ public class MapArea
       {
         return coordinates.latitude() <= north && coordinates.latitude() >= south
                && isAcrossGreenwichAntimeridian() ? coordinates.longitude() >= west && coordinates.longitude() <= east
-                                                  :  coordinates.longitude() >= east && coordinates.longitude() <= west;
+                                                  : coordinates.longitude() >= east && coordinates.longitude() <= west;
       }
 
     /***********************************************************************************************************************************************************

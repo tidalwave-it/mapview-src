@@ -198,7 +198,8 @@ public class MapView extends Region
       }
 
     /***********************************************************************************************************************************************************
-     * Options for creating a {@code MapView}.
+     * Options for creating a {@code MapView}. Don't directly create an instance of this class, but use {@link MapView#options()} and then set the desired
+     * attributes with a {@code with*()} method.
      * @param   cacheFolder         the {@link Path} of the folder where cached tiles are stored
      * @param   downloadAllowed     whether downloading tiles is allowed
      * @param   poolSize            the number of parallel thread of the tile downloader
@@ -212,8 +213,8 @@ public class MapView extends Region
                           boolean downloadAllowed,
                           int poolSize,
                           int tileQueueCapacity,
-                          Supplier<Image> waitingImage,
-                          Function<Integer, ExecutorService> executorService) {}
+                          @Nonnull Supplier<Image> waitingImage,
+                          @Nonnull Function<Integer, ExecutorService> executorService) {}
 
     /** The tile source. */
     @Nonnull
@@ -329,6 +330,7 @@ public class MapView extends Region
 
     /***********************************************************************************************************************************************************
      * {@return a new set of default options}.
+     * @see                   Options
      **********************************************************************************************************************************************************/
     @Nonnull
     public static Options options()
@@ -730,7 +732,6 @@ public class MapView extends Region
             final var amount = -Math.signum(Math.floor(event.getDeltaY() - scroll));
             scroll = event.getDeltaY();
             log.debug("zoom change for scroll: {}", amount);
-            System.err.println("AMOUNT " + amount);
             zoom.set(Math.round(zoom.get() + amount));
           }
       }

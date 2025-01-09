@@ -28,6 +28,8 @@ package it.tidalwave.mapviewer;
 import jakarta.annotation.Nonnull;
 import java.net.URI;
 import it.tidalwave.mapviewer.javafx.impl.Tile;
+import org.apiguardian.api.API;
+import static org.apiguardian.api.API.Status.STABLE;
 
 /***************************************************************************************************************************************************************
  *
@@ -37,6 +39,7 @@ import it.tidalwave.mapviewer.javafx.impl.Tile;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = STABLE)
 public interface TileSource extends Projection
   {
     /***********************************************************************************************************************************************************

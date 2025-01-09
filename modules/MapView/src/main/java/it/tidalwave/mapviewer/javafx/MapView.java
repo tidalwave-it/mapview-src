@@ -64,12 +64,14 @@ import it.tidalwave.mapviewer.impl.RangeLimitedDoubleProperty;
 import it.tidalwave.mapviewer.impl.TileCache;
 import it.tidalwave.mapviewer.javafx.impl.TileGrid;
 import it.tidalwave.mapviewer.javafx.impl.Translation;
+import org.apiguardian.api.API;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.With;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import static org.apiguardian.api.API.Status.STABLE;
 import static java.lang.Double.doubleToLongBits;
 import static javafx.util.Duration.ZERO;
 
@@ -114,6 +116,7 @@ import static javafx.util.Duration.ZERO;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = STABLE)
 @Slf4j
 public class MapView extends Region
   {
@@ -127,6 +130,7 @@ public class MapView extends Region
     /***********************************************************************************************************************************************************
      * This helper class provides methods useful for creating map overlays.
      **********************************************************************************************************************************************************/
+    @API(status = STABLE)
     @RequiredArgsConstructor(staticName = "of") @Accessors(fluent = true)
     public static class OverlayHelper
       {
@@ -202,6 +206,7 @@ public class MapView extends Region
      * @param   waitingImage        a {@link Supplier} of the image to be rendered while the tile bitmap has not been downloaded yet
      * @param   executorService     the {@link ExecutorService} to load tiles in backgrounds
      **********************************************************************************************************************************************************/
+    @API(status = STABLE)
     @With
     public record Options(@Nonnull Path cacheFolder,
                           boolean downloadAllowed,

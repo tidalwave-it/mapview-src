@@ -26,10 +26,12 @@
 package it.tidalwave.mapviewer;
 
 import jakarta.annotation.Nonnull;
+import org.apiguardian.api.API;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import static org.apiguardian.api.API.Status.STABLE;
 
 /***************************************************************************************************************************************************************
  *
@@ -40,6 +42,7 @@ import lombok.experimental.Accessors;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = STABLE)
 @RequiredArgsConstructor(staticName = "of") @Accessors(fluent = true) @Getter @EqualsAndHashCode
 public final class MapPoint implements Cartesian
   {

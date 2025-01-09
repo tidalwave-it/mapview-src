@@ -26,9 +26,11 @@
 package it.tidalwave.mapviewer;
 
 import jakarta.annotation.Nonnull;
+import org.apiguardian.api.API;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import static org.apiguardian.api.API.Status.STABLE;
 import static lombok.AccessLevel.PRIVATE;
 
 /***************************************************************************************************************************************************************
@@ -38,6 +40,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = STABLE)
 @RequiredArgsConstructor(access = PRIVATE) @Getter @EqualsAndHashCode
 public class MapArea
   {

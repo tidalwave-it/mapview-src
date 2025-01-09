@@ -25,6 +25,9 @@
  */
 package it.tidalwave.mapviewer;
 
+import org.apiguardian.api.API;
+import static org.apiguardian.api.API.Status.STABLE;
+
 /***************************************************************************************************************************************************************
  *
  * An abstraction for things that have (x,y) coordinates.
@@ -32,6 +35,7 @@ package it.tidalwave.mapviewer;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = STABLE)
 public interface Cartesian
   {
     /** {@return the x coordinate}. */

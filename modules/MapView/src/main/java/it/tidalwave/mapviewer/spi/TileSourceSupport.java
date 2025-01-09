@@ -28,9 +28,11 @@ package it.tidalwave.mapviewer.spi;
 import jakarta.annotation.Nonnull;
 import it.tidalwave.mapviewer.Projection;
 import it.tidalwave.mapviewer.TileSource;
+import org.apiguardian.api.API;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /***************************************************************************************************************************************************************
  *
@@ -40,6 +42,7 @@ import lombok.experimental.Delegate;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = EXPERIMENTAL)
 @RequiredArgsConstructor @Getter
 public abstract class TileSourceSupport implements TileSource
   {

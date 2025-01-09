@@ -44,7 +44,6 @@
     </description>
 
     <properties>
-        <assertj.core.version>3.27.2</assertj.core.version>
         <tft.javafx.version>21.0.5</tft.javafx.version>
         <thesefoolishthings.version>4.0-ALPHA-2</thesefoolishthings.version>
     </properties>
@@ -80,11 +79,6 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-web</artifactId>
                 <version>${tft.javafx.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -30,7 +30,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.tidalwave.mapviewer.MapCoordinates;
 import it.tidalwave.mapviewer.MapPoint;
 import it.tidalwave.mapviewer.Projection;
+import org.apiguardian.api.API;
 import lombok.RequiredArgsConstructor;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static java.lang.Math.*;
 
 /***************************************************************************************************************************************************************
@@ -40,6 +42,7 @@ import static java.lang.Math.*;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
+@API(status = EXPERIMENTAL)
 @RequiredArgsConstructor
 public class MercatorProjection implements Projection
   {

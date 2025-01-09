@@ -27,7 +27,6 @@ package it.tidalwave.mapviewer.impl;
 
 import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
-import javafx.beans.property.SimpleObjectProperty;
 import it.tidalwave.mapviewer.MapArea;
 import it.tidalwave.mapviewer.MapCoordinates;
 import it.tidalwave.mapviewer.MapPoint;

@@ -38,6 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.tidalwave.mapviewer.MapCoordinates;
 import it.tidalwave.mapviewer.TileSource;
 import it.tidalwave.mapviewer.impl.MapViewModel;
+import it.tidalwave.mapviewer.impl.TileCache;
 import it.tidalwave.mapviewer.javafx.MapView;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;

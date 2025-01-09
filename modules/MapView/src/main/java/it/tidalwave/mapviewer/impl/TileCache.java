@@ -23,7 +23,7 @@
  *
  * *************************************************************************************************************************************************************
  */
-package it.tidalwave.mapviewer.javafx.impl;
+package it.tidalwave.mapviewer.impl;
 
 import java.lang.ref.SoftReference;
 import jakarta.annotation.Nonnull;
@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -43,8 +42,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import javafx.scene.image.Image;
-import javafx.application.Platform;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.tidalwave.mapviewer.javafx.MapView;
 import lombok.extern.slf4j.Slf4j;
@@ -59,11 +56,11 @@ import static java.net.http.HttpClient.Redirect.ALWAYS;
  *
  **************************************************************************************************************************************************************/
 @Slf4j
-public class TileCache 
+public class TileCache
   {
     /** The queue of tiles to be downloaded. */
     @Nonnull
-    private final BlockingQueue<Tile> tileQueue;
+    /* visible for testing */ final BlockingQueue<AbstractTile> tileQueue;
 
     /** Options of the map view. */
     @Nonnull
@@ -77,10 +74,7 @@ public class TileCache
     private volatile boolean stopped = false;
 
     /** This is important to avoid flickering then the TileGrid recreates tiles. */
-    private final Map<URI, SoftReference<Image>> memoryImageCache = new ConcurrentHashMap<>();
-
-    /** The placeholder used while the tile image has not been loaded yet. */
-    private final Image waitingImage = new Image(TileCache.class.getResource("/hold-on.gif").toExternalForm());
+    /* visible for testing */ final Map<URI, SoftReference<Object>> memoryImageCache = new ConcurrentHashMap<>();
 
     /***********************************************************************************************************************************************************
      *
@@ -91,7 +85,7 @@ public class TileCache
         this.options = options;
         tileQueue = new LinkedBlockingQueue<>(options.tileQueueCapacity());
         final var poolSize = options.poolSize();
-        executorService = Executors.newFixedThreadPool(poolSize);
+        executorService = options.executorService().apply(poolSize);
         IntStream.range(0, poolSize).forEach(i -> executorService.submit(this::tileLoader));
       }
 
@@ -107,18 +101,21 @@ public class TileCache
      * Loads a tile in background.
      * @param   tile      the tile to download
      **********************************************************************************************************************************************************/
-    public final void loadTileInBackground (@Nonnull final Tile tile)
+    public final void loadTileInBackground (@Nonnull final AbstractTile tile)
       {
+        log.debug("loadTileInBackground({})", tile);
         final var imageRef = memoryImageCache.get(tile.getUri());
         final var image = (imageRef == null) ? null : imageRef.get();
 
         if (image != null)
           {
-            tile.setImage(image);
+            log.debug("loading tile from memory cache...");
+            tile.setImageByBitmap(image);
           }
         else
           {
             final var localPath = resolveCachedTilePath(tile);
+            log.debug("looking in disk cache {} ...", localPath);
 
             if (Files.exists(localPath))
               {
@@ -126,15 +123,15 @@ public class TileCache
               }
             else
               {
-                tile.setImage(waitingImage);
+                tile.setImageByBitmap(options.waitingImage().get());
 
                 if (tileQueue.offer(tile))
                   {
-                    log.debug("Tiles in download queue: {}", tileQueue.size());
+                    log.debug("added tile {} to download queue - tiles in queue: {}", tile.getUri(), tileQueue.size());
                   }
                 else
                   {
-                    log.warn("Download queue full, discarding: {}", tile);
+                    log.warn("download queue full, discarding: {}", tile);
                   }
               }
           }
@@ -183,11 +180,11 @@ public class TileCache
 
                 if (!Files.exists(localPath))
                   {
-                    Platform.runLater(() -> tile.setImage(null));
+                    tile.setImageByPath(null);
                   }
                 else
                   {
-                    Platform.runLater(() -> loadImageFromCache(tile, localPath));
+                    loadImageFromCache(tile, localPath);
                   }
               }
             catch (InterruptedException ignored)
@@ -208,12 +205,10 @@ public class TileCache
      * @param     tile          the tile
      * @param     path          the path of the cache file
      **********************************************************************************************************************************************************/
-    private void loadImageFromCache (@Nonnull final Tile tile, @Nonnull final Path path)
+    private void loadImageFromCache (@Nonnull final AbstractTile tile, @Nonnull final Path path)
       {
-        log.debug("Loading tile from cache: {}", path);
-        final var image = new Image(path.toUri().toString());
-        memoryImageCache.put(tile.getUri(), new SoftReference<>(image));
-        tile.setImage(image);
+        log.debug("loadImageFromCache({}, {})", tile, path);
+        tile.setImageByPath(path).ifPresent(image -> memoryImageCache.put(tile.getUri(), new SoftReference<>(image)));
       }
 
     /***********************************************************************************************************************************************************
@@ -221,7 +216,7 @@ public class TileCache
      * @param     tile          the tile
      **********************************************************************************************************************************************************/
     @Nonnull
-    private Path resolveCachedTilePath (@Nonnull final Tile tile)
+    private Path resolveCachedTilePath (@Nonnull final AbstractTile tile)
       {
         return options.cacheFolder().resolve(tile.getSource().getCachePrefix()).resolve(mangle(tile.getUri().toString()));
       }
@@ -232,7 +227,7 @@ public class TileCache
      * @param     uri           the uri of the tile
      **********************************************************************************************************************************************************/
     @SuppressFBWarnings("REC_CATCH_EXCEPTION")
-    private static void downloadTile (@Nonnull final Path localPath, @Nonnull final URI uri)
+    /* visible for testing */ static void downloadTile (@Nonnull final Path localPath, @Nonnull final URI uri)
       {
         try (final var client = HttpClient.newBuilder().followRedirects(ALWAYS).build())
           {

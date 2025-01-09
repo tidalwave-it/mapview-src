@@ -23,123 +23,52 @@
  *
  * *************************************************************************************************************************************************************
  */
-package it.tidalwave.mapviewer.javafx.impl;
+package it.tidalwave.mapviewer.impl;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.nio.file.Path;
 import java.net.URI;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.application.Platform;
 import it.tidalwave.mapviewer.TileSource;
-import it.tidalwave.mapviewer.impl.TileCache;
-import it.tidalwave.mapviewer.impl.AbstractTile;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 /***************************************************************************************************************************************************************
  *
- * This class represents a single tile for rendering a map. It basically wraps a bitmap that is available on the internet at a specific URL, and it has the
- * capability of being loaded in background and rendering some temporary icons while the process has not terminated.
- * 
- * @author  Fabrizio Giudici
+ * This abstraction for a tile allows to have more code independent of JavaFX and this more easily testable.
+ *
+ * @author Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-@Getter @Slf4j
-public class Tile extends ImageView implements AbstractTile
+public interface AbstractTile
   {
-    public static final int CREATION_TIMEOUT = 2000;
-    /** The source of tile bitmaps. */
+    /***********************************************************************************************************************************************************
+     * Sets the image loading it from a given path.
+     * @param     imagePath         the path of the image
+     * @return                      the image
+     **********************************************************************************************************************************************************/
     @Nonnull
-    private final TileSource source;
-
-    /** The URL of this tile. */
-    private final URI uri;
-
-    /** The zoom level this tile belongs to. */
-    private final int zoom;
+    public Optional<Object> setImageByPath (@Nullable Path imagePath);
 
     /***********************************************************************************************************************************************************
-     * Creates a new tile and submits it to the cache for downloading.
-     * @param   tileCache       the tile cache
-     * @param   source          the tile source
-     * @param   uri             the URL of the tile
-     * @param   size            the size of the tile
-     * @param   zoom            the zoom level of this tile
+     * Sets the image from a given bitmap.
+     * @param     bitmap            the bitmap (can be {@code null}
      **********************************************************************************************************************************************************/
-    @SuppressWarnings("this-escape")
-    protected Tile (@Nonnull final TileCache tileCache, @Nonnull final TileSource source, @Nonnull final URI uri, final int size, final int zoom)
-      {
-        this.source = source;
-        this.uri = uri;
-        this.zoom = zoom;
-        setFitWidth(size);
-        setFitHeight(size);
-        tileCache.loadTileInBackground(this);
-      }
+    public void setImageByBitmap (@Nullable Object bitmap);
 
     /***********************************************************************************************************************************************************
-     * {@inheritDoc}
+     * {@return the URI of this tile}.
      **********************************************************************************************************************************************************/
-    @Override @Nonnull
-    public Optional<Object> setImageByPath (@Nullable final Path path)
-      {
-        if (path == null)
-          {
-            setImageByBitmap(null);
-          }
-        else if (Platform.isFxApplicationThread())
-          {
-            setImage(new Image(path.toUri().toString()));
-          }
-        else
-          {
-            final var latch = new CountDownLatch(1);
-            Platform.runLater(() ->
-              {
-                setImage(new Image(path.toUri().toString()));
-                latch.countDown();
-              });
-
-            try
-              {
-                latch.await(CREATION_TIMEOUT, TimeUnit.MILLISECONDS);
-              }
-            catch (InterruptedException e)
-              {
-                log.error("Timeout when loading " + path + " for " + uri, e);
-              }
-          }
-
-        return Optional.ofNullable(getImage());
-      }
+    @Nonnull
+    public URI getUri();
 
     /***********************************************************************************************************************************************************
-     * {@inheritDoc}
+     * {@return the source of this tile}.
      **********************************************************************************************************************************************************/
-    @Override
-    public void setImageByBitmap (@Nullable final Object image)
-      {
-        if (Platform.isFxApplicationThread())
-          {
-            setImage((Image)image);
-          }
-        else
-          {
-            Platform.runLater(() -> setImage((Image)image));
-          }
-      }
+    @Nonnull
+    public TileSource getSource();
 
     /***********************************************************************************************************************************************************
-     * {@inheritDoc}
+     * {@return the zoom level of this tile}.
      **********************************************************************************************************************************************************/
-    @Override @Nonnull
-    public String toString()
-      {
-        return super.toString() + " - " + uri;
-      }
+    public int getZoom();
   }

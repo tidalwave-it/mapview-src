@@ -27,7 +27,11 @@ package it.tidalwave.mapviewer.javafx;
 
 import jakarta.annotation.Nonnull;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.nio.file.Path;
 import javafx.animation.Interpolatable;
 import javafx.animation.Interpolator;
@@ -41,6 +45,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
@@ -56,7 +61,7 @@ import it.tidalwave.mapviewer.OpenStreetMapTileSource;
 import it.tidalwave.mapviewer.TileSource;
 import it.tidalwave.mapviewer.impl.MapViewModel;
 import it.tidalwave.mapviewer.impl.RangeLimitedDoubleProperty;
-import it.tidalwave.mapviewer.javafx.impl.TileCache;
+import it.tidalwave.mapviewer.impl.TileCache;
 import it.tidalwave.mapviewer.javafx.impl.TileGrid;
 import it.tidalwave.mapviewer.javafx.impl.Translation;
 import lombok.Getter;
@@ -115,6 +120,9 @@ public class MapView extends Region
     private static final int DEFAULT_TILE_POOL_SIZE = 10;
     private static final int DEFAULT_TILE_QUEUE_CAPACITY = 1000;
     private static final OpenStreetMapTileSource DEFAULT_TILE_SOURCE = new OpenStreetMapTileSource();
+
+    /** The placeholder used while the tile image has not been loaded yet. */
+    private static final Supplier<Image> WAITING_IMAGE = () -> new Image(MapView.class.getResource("/hold-on.gif").toExternalForm());
 
     /***********************************************************************************************************************************************************
      * This helper class provides methods useful for creating map overlays.
@@ -191,9 +199,16 @@ public class MapView extends Region
      * @param   downloadAllowed     whether downloading tiles is allowed
      * @param   poolSize            the number of parallel thread of the tile downloader
      * @param   tileQueueCapacity   the capacity of the tile queue
+     * @param   waitingImage        a {@link Supplier} of the image to be rendered while the tile bitmap has not been downloaded yet
+     * @param   executorService     the {@link ExecutorService} to load tiles in backgrounds
      **********************************************************************************************************************************************************/
     @With
-    public record Options(@Nonnull Path cacheFolder, boolean downloadAllowed, int poolSize, int tileQueueCapacity) {}
+    public record Options(@Nonnull Path cacheFolder,
+                          boolean downloadAllowed,
+                          int poolSize,
+                          int tileQueueCapacity,
+                          Supplier<Image> waitingImage,
+                          Function<Integer, ExecutorService> executorService) {}
 
     /** The tile source. */
     @Nonnull
@@ -313,7 +328,12 @@ public class MapView extends Region
     @Nonnull
     public static Options options()
       {
-        return new Options(Path.of(System.getProperty("java.io.tmpdir")), true, DEFAULT_TILE_POOL_SIZE, DEFAULT_TILE_QUEUE_CAPACITY);
+        return new Options(Path.of(System.getProperty("java.io.tmpdir")),
+                           true,
+                           DEFAULT_TILE_POOL_SIZE,
+                           DEFAULT_TILE_QUEUE_CAPACITY,
+                           WAITING_IMAGE,
+                           Executors::newFixedThreadPool);
       }
 
     /***********************************************************************************************************************************************************

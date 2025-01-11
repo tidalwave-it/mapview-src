@@ -43,6 +43,7 @@
 
     <properties>
         <jpx.version>3.2.0</jpx.version>
+        <tft.javafx.modules>javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.web</tft.javafx.modules>
         <tft.mainClass>it.tidalwave.mapview.javafx.example.MapViewExampleApplication</tft.mainClass>
     </properties>
 
@@ -63,6 +64,10 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

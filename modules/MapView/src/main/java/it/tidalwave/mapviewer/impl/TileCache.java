@@ -27,6 +27,8 @@ package it.tidalwave.mapviewer.impl;
 
 import java.lang.ref.SoftReference;
 import jakarta.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
@@ -72,6 +74,9 @@ public class TileCache
 
     /** This is important to avoid flickering then the TileGrid recreates tiles. */
     /* visible for testing */ final Map<URI, SoftReference<Object>> memoryImageCache = new ConcurrentHashMap<>();
+
+    /** The unterminated runnables still in execution after {@link #dispose()} - should be empty. */
+    /* visible for testing */ final List<Runnable> unterminatedRunnables = new ArrayList<>();
 
     /***********************************************************************************************************************************************************
      *
@@ -148,11 +153,22 @@ public class TileCache
      *
      **********************************************************************************************************************************************************/
     public void dispose()
-            throws InterruptedException
       {
         log.debug("dispose()");
-        executorService.shutdown();
-        executorService.awaitTermination(10, TimeUnit.SECONDS);
+        unterminatedRunnables.addAll(executorService.shutdownNow());
+
+        try
+          {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS))
+              {
+                log.warn("The following threads were not terminated: {}", unterminatedRunnables);
+              }
+          }
+        catch (InterruptedException e)
+          {
+            log.warn("Interrupted while shutting down.");
+            Thread.currentThread().interrupt();
+          }
       }
 
     /***********************************************************************************************************************************************************

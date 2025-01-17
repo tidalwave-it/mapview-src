@@ -169,6 +169,31 @@ public class TileCacheTest
       }
 
     /**********************************************************************************************************************************************************/
+    @Test
+    public void test_dispose()
+            throws InterruptedException
+      {
+        // given
+        final var tileSource = new OpenStreetMapTileSource();
+
+        for (int i = 0; i < 20; i++)
+          {
+            final var tile = mock(AbstractTile.class);
+            when(tile.getSource()).thenReturn(tileSource);
+            // TODO: would be better tested by connecting to a mock server that make incoming calls stuck
+            when(tile.getUri()).thenReturn(URI.create(String.format("https://tile.openstreetmap.org/17/68647/%d.png", 47000 + i)));
+            when(tile.getZoom()).thenReturn(17);
+            underTest.loadTileInBackground(tile);
+          }
+        // when
+        underTest.dispose();
+        Thread.sleep(1000);
+        // then
+        final var unterminatedRunnables = underTest.unterminatedRunnables;
+        assertThat(unterminatedRunnables).withFailMessage(unterminatedRunnables.toString()).isEmpty();
+      }
+
+    /**********************************************************************************************************************************************************/
     @Nonnull
     private static String sha256Of (@Nonnull final Path path)
             throws NoSuchAlgorithmException, IOException

@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>it.tidalwave.mapview</groupId>
+        <artifactId>it-tidalwave-mapview</artifactId>
+        <version>1.0-ALPHA-2</version>
+        <relativePath />
+    </parent>
+
+    <artifactId>superpom</artifactId>
+    <packaging>pom</packaging>
+    <version>1</version>
+    <name>MapView :: Tile Cache</name>
+    <description>
+        A cache of tiles from OpenStreetMap and OpenTopoMap for testing.
+    </description>
+
+    <licenses>
+        <license>
+            <name>ODbL</name>
+            <url>https://opendatacommons.org/licenses/odbl/</url>
+            <comments>OpenStreetMap tiles: (C) by OpenStreetMap Foundation, licensed under Open Data Commons Open Database License</comments>
+        </license>
+        <license>
+            <name>CC-BY-SA 3.0</name>
+            <url>https://creativecommons.org/licenses/by-sa/3.0/</url>
+            <comments>OpenTopoMap tiles: Kartendaten: (C) OpenStreetMap-Mitwirkende, SRTM | Kartendarstellung: (C) OpenTopoMap (CC-BY-SA), licensed under Creative Commons Attribution-ShareAlike 3.0 Unported</comments>
+        </license>
+    </licenses>
+
+</project>

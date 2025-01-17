@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.IOException;
+import java.nio.file.Path;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -52,16 +53,20 @@ import it.tidalwave.mapviewer.OpenStreetMapTileSource;
 import it.tidalwave.mapviewer.OpenTopoMapTileSource;
 import it.tidalwave.mapviewer.TileSource;
 import it.tidalwave.mapviewer.javafx.MapView;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import static lombok.AccessLevel.PROTECTED;
 
 /***************************************************************************************************************************************************************
  *
  * @author      Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-@Slf4j
+@Getter(PROTECTED) @Slf4j
 public class MapViewExampleController
   {
+    private static final Path CACHE_FOLDER = Path.of("target/tile-cache");
+
     private static final String TRACK_OVERLAY_NAME = "track";
     private static final MapCoordinates START = MapCoordinates.of(44.4072, 8.9340);
     private static final double START_ZOOM = 8;
@@ -103,7 +108,7 @@ public class MapViewExampleController
     private Button btZeroZero;
 
     @FXML
-    private Button btReframe;
+    private Button btTrack;
 
     @FXML
     private Button btOSM;
@@ -133,7 +138,7 @@ public class MapViewExampleController
      **********************************************************************************************************************************************************/
     public void initialize()
       {
-        mapView = new MapView(MapView.options());
+        mapView = new MapView(MapView.options().withCacheFolder(CACHE_FOLDER));
         mapView.setZoom(START_ZOOM);
         mapView.setCenter(START);
         mapView.setRecenterOnDoubleClick(true);
@@ -160,7 +165,7 @@ public class MapViewExampleController
         btZeroZero.setOnAction(event -> mapView.setCenter(MapCoordinates.of(0, 0)));
         btOSM.setOnAction(event -> mapView.setTileSource(osm));
         btOTM.setOnAction(event -> mapView.setTileSource(otm));
-        btReframe.setOnAction(event -> renderTrack());
+        btTrack.setOnAction(event -> renderTrack());
       }
 
     /***********************************************************************************************************************************************************

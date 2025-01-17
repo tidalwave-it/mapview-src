@@ -45,7 +45,10 @@
 
     <properties>
         <tft.javafx.version>21.0.5</tft.javafx.version>
+        <tft.openjfx-monocle.version>21.0.2</tft.openjfx-monocle.version>
         <thesefoolishthings.version>4.0-ALPHA-2</thesefoolishthings.version>
+        <tft.test.maxMemory>1024M</tft.test.maxMemory>
+        <tft.testfx-monocle.vmOptions>-Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dheadless.geometry=1600x1200-32</tft.testfx-monocle.vmOptions>
     </properties>
 
     <dependencyManagement>
@@ -121,6 +124,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
@@ -173,5 +186,97 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- Profile that unpacks a tile cache used by some tests to avoid spamming the tile servers. -->
+    <profiles>
+        <profile>
+            <id>unpack-tile-cache</id>
+            <activation>
+                <file>
+                    <exists>src/config/unpack-tile-cache</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-tile-cache</id>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>it.tidalwave.mapview</groupId>
+                                            <artifactId>tile-cache</artifactId>
+                                            <version>2</version>
+                                            <type>tar.gz</type>
+                                            <outputDirectory>${project.build.directory}/tile-cache</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>deploy-tile-cache</id>
+            <build>
+                <defaultGoal>process-test-resources gpg:sign-and-deploy-file</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <finalName>tile</finalName>
+                                    <inlineDescriptors>
+                                        <inlineDescriptor>
+                                            <id>cache</id>
+                                            <formats>
+                                                <format>tar.gz</format>
+                                            </formats>
+                                            <includeBaseDirectory>false</includeBaseDirectory>
+                                            <fileSet>
+                                                <outputDirectory>/</outputDirectory>
+                                                <directory>target/tile-cache</directory>
+                                            </fileSet>
+                                        </inlineDescriptor>
+                                    </inlineDescriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <groupId>it.tidalwave.mapview</groupId>
+                            <artifactId>tile-cache</artifactId>
+                            <version>2</version>
+                            <packaging>tar.gz</packaging>
+                            <generatePom>true</generatePom>
+                            <file>${project.build.directory}/tile-cache.tar.gz</file>
+                            <pomFile>${project.build.directory}/test-classes/tile-cache-pom.xml</pomFile>
+                            <url>${tft.staging-repo.url}/service/local/staging/deploy/maven2</url>
+                            <repositoryId>${tft.staging-repo.id}</repositoryId>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

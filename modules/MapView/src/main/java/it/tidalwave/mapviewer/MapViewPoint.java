@@ -26,6 +26,7 @@
 package it.tidalwave.mapviewer;
 
 import jakarta.annotation.Nonnull;
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.apiguardian.api.API;
 import lombok.EqualsAndHashCode;
@@ -80,6 +81,16 @@ public final class MapViewPoint implements Cartesian
     public MapPoint translated (final double dx, final double dy)
       {
         return MapPoint.of(x + dx, x + dy);
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return a {@link Point2D} equivalent}.
+     * @since   1.0-ALPHA-3
+     **********************************************************************************************************************************************************/
+    @Nonnull
+    public Point2D toPoint2D()
+      {
+        return new Point2D(x, y);
       }
 
     /***********************************************************************************************************************************************************

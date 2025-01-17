@@ -44,6 +44,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static java.nio.channels.FileChannel.MapMode.READ_ONLY;
+import static java.lang.Integer.toHexString;
 import static org.mockito.Mockito.*;
 
 /***************************************************************************************************************************************************************
@@ -53,7 +54,7 @@ import static org.mockito.Mockito.*;
  **************************************************************************************************************************************************************/
 public class TileCacheTest
   {
-    static record MockImage (URI uri) {};
+    static record MockImage (URI uri) {}
 
     private static final URI TILE_URI = URI.create("https://tile.openstreetmap.org/17/68647/47546.png");
 
@@ -111,7 +112,7 @@ public class TileCacheTest
         underTest.loadTileInBackground(tile);
         // then
         assertThat(underTest.tileQueue).isEmpty();
-        assertThat(underTest.getPendingTileCount()).isEqualTo(0);
+        assertThat(underTest.getPendingTileCount()).isZero();
         verify(tile).setImageByBitmap(same(image));
       }
 
@@ -127,12 +128,12 @@ public class TileCacheTest
         underTest.loadTileInBackground(tile);
         // then
         assertThat(underTest.tileQueue).isEmpty();
-        assertThat(underTest.getPendingTileCount()).isEqualTo(0);
+        assertThat(underTest.getPendingTileCount()).isZero();
         assertThat(underTest.memoryImageCache).hasEntrySatisfying(TILE_URI,
                                                                   new Condition<>(c -> (c instanceof final SoftReference<?> sr)
                                                                         && (sr.get() instanceof MockImage(final var uri))
                                                                         && uri.equals(tile.getUri()), "SoftRererence to " + new MockImage(tile.getUri())));
-        verify(tile).setImageByPath(eq(CACHED_TILE_PATH));
+        verify(tile).setImageByPath(CACHED_TILE_PATH);
       }
 
     /**********************************************************************************************************************************************************/
@@ -187,12 +188,12 @@ public class TileCacheTest
     @Nonnull
     private static String toString (@Nonnull final byte[] bytes)
       {
-        final StringBuilder builder = new StringBuilder();
+        final var builder = new StringBuilder();
 
         for (final byte b : bytes)
           {
             final int value = b & 0xff;
-            builder.append(Integer.toHexString(value >>> 4)).append(Integer.toHexString(value & 0x0f));
+            builder.append(toHexString(value >>> 4)).append(toHexString(value & 0x0f));
           }
 
         return builder.toString();

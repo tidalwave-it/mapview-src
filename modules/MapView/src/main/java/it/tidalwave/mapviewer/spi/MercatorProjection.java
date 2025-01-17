@@ -108,6 +108,6 @@ public class MercatorProjection implements Projection
      **********************************************************************************************************************************************************/
     private double arc (final double zoomLevel)
       {
-        return EARTH_CIRCUMFERENCE / (pow(2, zoomLevel) * tileSize); // was EARTH_CIRCUMFERENCE / ((1 << (maxZoomLevel - zoomLevel)) * tileSize);
+        return EARTH_CIRCUMFERENCE / (pow(2, zoomLevel) * tileSize);
       }
   }

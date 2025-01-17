@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -199,7 +200,12 @@ public class MapViewExampleController
                         helper.addAll(pointsAndArea.points.stream().map(wp -> createPoint(helper, wp)).toList()));
                 mapView.fitArea(pointsAndArea.area);
               }
-            catch (InterruptedException | ExecutionException e)
+            catch (InterruptedException e)
+              {
+                log.error("", e);
+                Thread.currentThread().interrupt();
+              }
+            catch (ExecutionException e)
               {
                 log.error("", e);
               }
@@ -258,7 +264,7 @@ public class MapViewExampleController
         catch (IOException e)
           {
             log.error(e.toString());
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
           }
       }
   }

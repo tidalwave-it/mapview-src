@@ -30,7 +30,9 @@ import javafx.animation.Interpolatable;
 import javafx.beans.value.WritableValue;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /***************************************************************************************************************************************************************
  *
@@ -39,12 +41,12 @@ import lombok.ToString;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-@AllArgsConstructor(staticName = "of") @EqualsAndHashCode @ToString
+@AllArgsConstructor(staticName = "of") @Accessors(fluent = true) @Getter @EqualsAndHashCode @ToString
 public class Translation implements WritableValue<Translation>, Interpolatable<Translation>
   {
-    public double x;
+    private double x;
 
-    public double y;
+    private double y;
 
     /** {@inheritDoc} */
     @Override @Nonnull

@@ -70,9 +70,6 @@ public class TileCache
     @Nonnull
     private final ExecutorService executorService;
 
-    /** Whether the downloader thread should be stopped. */
-    private volatile boolean stopped = false;
-
     /** This is important to avoid flickering then the TileGrid recreates tiles. */
     /* visible for testing */ final Map<URI, SoftReference<Object>> memoryImageCache = new ConcurrentHashMap<>();
 
@@ -86,7 +83,7 @@ public class TileCache
         tileQueue = new LinkedBlockingQueue<>(options.tileQueueCapacity());
         final var poolSize = options.poolSize();
         executorService = options.executorService().apply(poolSize);
-        IntStream.range(0, poolSize).forEach(i -> executorService.submit(this::tileLoader));
+        IntStream.range(0, poolSize).forEach(i -> executorService.execute(this::tileLoader));
       }
 
     /***********************************************************************************************************************************************************
@@ -154,7 +151,6 @@ public class TileCache
             throws InterruptedException
       {
         log.debug("dispose()");
-        stopped = true;
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.SECONDS);
       }
@@ -164,7 +160,7 @@ public class TileCache
      **********************************************************************************************************************************************************/
     private void tileLoader()
       {
-        while (!stopped)
+        while (!Thread.interrupted())
           {
             try
               {
@@ -190,6 +186,8 @@ public class TileCache
             catch (InterruptedException ignored)
               {
                 log.info("tileLoader interrupted");
+                Thread.currentThread().interrupt();
+                break;
               }
             catch (Exception e) // defensive
               {
@@ -257,6 +255,11 @@ public class TileCache
                   log.error("status code {} for {}; {}", response.statusCode(), uri, response.headers().map());
                   getErrorBody(response).ifPresent(log::error);
               }
+          }
+        catch (InterruptedException e)
+          {
+            log.error("", e);
+            Thread.currentThread().interrupt();
           }
         catch (Exception e) // defensive
           {

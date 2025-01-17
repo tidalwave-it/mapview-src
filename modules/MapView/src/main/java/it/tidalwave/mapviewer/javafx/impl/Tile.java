@@ -107,11 +107,15 @@ public class Tile extends ImageView implements AbstractTile
 
             try
               {
-                latch.await(CREATION_TIMEOUT, TimeUnit.MILLISECONDS);
+                if (!latch.await(CREATION_TIMEOUT, TimeUnit.MILLISECONDS))
+                  {
+                    log.error("Time-out while setting the image");
+                  }
               }
             catch (InterruptedException e)
               {
                 log.error("Timeout when loading " + path + " for " + uri, e);
+                Thread.currentThread().interrupt();
               }
           }
 

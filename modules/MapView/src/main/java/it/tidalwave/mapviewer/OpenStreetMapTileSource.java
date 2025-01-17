@@ -88,7 +88,7 @@ public class OpenStreetMapTileSource extends TileSourceSupport
           }
         catch (URISyntaxException e)
           {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
           }
       }
 

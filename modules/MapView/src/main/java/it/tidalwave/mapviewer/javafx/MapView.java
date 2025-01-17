@@ -324,7 +324,6 @@ public class MapView extends Region
         AnchorPane.setRightAnchor(tileGrid, 0d);
         AnchorPane.setTopAnchor(tileGrid, 0d);
         AnchorPane.setBottomAnchor(tileGrid, 0d);
-        // needRefresh();
         setOnMouseClicked(this::onMouseClicked);
         setOnZoom(this::onZoom);
         setOnZoomStarted(this::onZoomStarted);
@@ -712,7 +711,7 @@ public class MapView extends Region
             final var delta = Translation.of(getWidth() / 2 - event.getX(), getHeight() / 2 - event.getY());
             final var target = new SimpleObjectProperty<>(Translation.of(0, 0));
             target.addListener((__, oldValue, newValue) ->
-                                       translateCenter(newValue.x - oldValue.x, newValue.y - oldValue.y));
+                                       translateCenter(newValue.x() - oldValue.x(), newValue.y() - oldValue.y()));
             animate(target, Translation.of(0, 0), delta, recenterDuration);
           }
       }

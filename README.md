@@ -1,7 +1,7 @@
 ![Maven Central](https://img.shields.io/maven-central/v/it.tidalwave.mapview/it-tidalwave-mapview.svg)
 [![Build Status](https://img.shields.io/jenkins/s/http/services.tidalwave.it/ci/job/MapView_Build_from_Scratch.svg)](https://services.tidalwave.it/ci/view/MapView)
 [![Test Status](https://img.shields.io/jenkins/t/http/services.tidalwave.it/ci/job/MapView.svg)](https://services.tidalwave.it/ci/view/MapView)
-[![Coverage](https://img.shields.io/jenkins/c/http/services.tidalwave.it/ci/job/MapView.svg)](https://services.tidalwave.it/ci/view/MapView)
+[![Coverage](https://img.shields.io/jenkins/coverage/jacoco?jobUrl=https%3A%2F%2Fservices.tidalwave.it%2Fci%2Fview%2FMapView%2Fjob%2FMapView%2F)](https://services.tidalwave.it/ci/view/MapView)
 
 MapView
 ================================
@@ -37,7 +37,7 @@ seem to be abandoned or not working. If you need a bug fix or an enhancement, re
 MapView requires and is tested with JDKs in this range: [21, 22).
 It is released under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
-Please have a look at the [project website](https://tidalwave.bitbucket.io/mapview/) for a quick introduction with samples, tutorials, JavaDocs and build reports.
+Please have a look at the [project website](https://tidalwave.bitbucket.io/mapview) for a quick introduction with samples, tutorials, JavaDocs and build reports.
 
 
 Bootstrapping

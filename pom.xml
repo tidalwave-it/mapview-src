@@ -42,7 +42,7 @@
     <version>1.0-ALPHA-3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MapView</name>
-    <url>https://tidalwave.bitbucket.io/mapview/</url>
+    <url>https://tidalwave.bitbucket.io/mapview</url>
     <inceptionYear>2024</inceptionYear>
     <description>
 MapView is a simple JavaFX 2 control that can render a tile-based map. It offers the following features:

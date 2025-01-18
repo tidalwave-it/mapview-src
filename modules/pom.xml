@@ -204,6 +204,8 @@
                                 </goals>
                                 <phase>generate-test-resources</phase>
                                 <configuration>
+                                    <skip>${tft.test.skip}</skip>
+                                    <overWriteIfNewer>true</overWriteIfNewer>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>it.tidalwave.mapview</groupId>

@@ -94,9 +94,13 @@ public class MapViewTest extends TestNGApplicationTest
         assertThat(underTest.getArea()).isEqualTo(MapArea.of(0, 0, 0, 0));
         assertThat(underTest.getMinZoom()).isEqualTo(1);
         assertThat(underTest.getMaxZoom()).isEqualTo(19);
-        // TODO: assertThat(underTest.getRecenterDuration()).isEqualTo(Duration.ofMillis(200));
         assertThat(underTest.getMetersPerPixel()).isEqualTo(78271.51696402048);
         assertThat(underTest.getOverlayNames()).isEmpty();
+        assertThat(underTest.getSingleClickBehaviour()).isEqualTo(MapView.DO_NOTHING);
+        assertThat(underTest.getDoubleClickBehaviour()).isEqualTo(MapView.DO_NOTHING);
+        assertThat(underTest.getDragBehaviour()).isEqualTo(MapView.TRANSLATE);
+        assertThat(underTest.getScrollBehaviour()).isEqualTo(MapView.DO_NOTHING);
+        // TODO: assertThat(underTest.getRecenterDuration()).isEqualTo(Duration.ofMillis(200));
       }
 
     /**********************************************************************************************************************************************************
@@ -119,17 +123,17 @@ public class MapViewTest extends TestNGApplicationTest
             robot.drag("#underTest", MouseButton.PRIMARY).moveBy(-200, -200).drop();
           }
         // then
-        assertThat(underTest.getCenter()).has(practicallyEqualsTo(MapCoordinates.of(39.503583, 15.729126)));
+        assertThat(underTest.getCenter()).has(practicallyEqualsTo(MapCoordinates.of(39.397541, 15.866455)));
       }
 
     /**********************************************************************************************************************************************************/
     @Test(groups = "display")
-    public void double_click_without_recenter_should_do_nothing()
+    public void double_click_with_DO_NOTHING_should_do_nothing()
       {
         // given
         runLaterAndWait(() ->
           {
-            underTest.setRecenterOnDoubleClick(false);
+            underTest.setDoubleClickBehaviour(MapView.DO_NOTHING);
             underTest.setCenter(MapCoordinates.of(44, 7));
             underTest.setZoom(15);
           });
@@ -143,12 +147,12 @@ public class MapViewTest extends TestNGApplicationTest
 
     /**********************************************************************************************************************************************************/
     @Test(groups = "display")
-    public void double_click_with_recenter_should_recenter()
+    public void double_click_with_RECENTER_should_recenter()
       {
         // given
         runLaterAndWait(() ->
           {
-            underTest.setRecenterOnDoubleClick(true);
+            underTest.setDoubleClickBehaviour(MapView.RECENTER);
             underTest.setCenter(MapCoordinates.of(44, 7));
             underTest.setZoom(15);
           });
@@ -248,6 +252,7 @@ public class MapViewTest extends TestNGApplicationTest
             underTest.setCenter(MapCoordinates.of(44.5, 11));
             underTest.setZoom(7);
             underTest.addOverlay("test", MapViewTest::createOverlay);
+            underTest.setDoubleClickBehaviour(MapView.RECENTER);
           });
 
         final var delay = 100;

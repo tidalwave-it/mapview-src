@@ -142,13 +142,12 @@ public class MapViewExampleController
         mapView = new MapView(MapView.options().withCacheFolder(CACHE_FOLDER));
         mapView.setZoom(START_ZOOM);
         mapView.setCenter(START);
-        mapView.setRecenterOnDoubleClick(true);
+        mapView.setDoubleClickBehaviour(MapView.RECENTER);
         AnchorPane.setLeftAnchor(mapView, 0.0);
         AnchorPane.setRightAnchor(mapView, 0.0);
         AnchorPane.setTopAnchor(mapView, 0.0);
         AnchorPane.setBottomAnchor(mapView, 0.0);
         apAnchorPane.getChildren().add(mapView);
-        mapView.setRecenterOnDoubleClick(true);
         slZoom.minProperty().bind(mapView.minZoomProperty());
         slZoom.maxProperty().bind(mapView.maxZoomProperty());
         slZoom.valueProperty().bindBidirectional(mapView.zoomProperty());

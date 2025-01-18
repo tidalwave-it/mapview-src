@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -50,6 +51,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.input.GestureEvent;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
@@ -105,7 +108,24 @@ import static javafx.util.Duration.ZERO;
  * The method {@link #fitArea(MapArea)} can be used to adapt rendering parameters so that the given area is rendered; this is useful e.g. when one wants to
  * render a GPS track.
  *
- * Maps can be scrolled by dragging and re-centered by double-clicking on a point (use {@link #setRecenterOnDoubleClick(boolean)} to enable this behaviour).
+ * Maps can be scrolled by dragging and re-centered by double-clicking on a point. In general, it is possible to associate various behaviours with common
+ * gestures thanks to the methods:
+ *
+ * <ul>
+ *   <li>{@link #setSingleClickBehaviour(BiConsumer)}</li>
+ *   <li>{@link #setDoubleClickBehaviour(BiConsumer)}</li>
+ *   <li>{@link #setDragBehaviour(BiConsumer)}</li>
+ *   <li>{@link #setScrollBehaviour(BiConsumer)}</li>
+ * </ul>
+ *
+ * and the pre-defined behaviours:
+ *
+ * <u>
+ *   <li>{@link #DO_NOTHING}</li>
+ *   <li>{@link #RECENTER}</li>
+ *   <li>{@link #TRANSLATE}</li>
+ *   <li>{@link #ZOOM}</li>
+ * </u>
  *
  * It is possible to add and remove overlays that move in solid with the map:
  *
@@ -125,6 +145,18 @@ import static javafx.util.Duration.ZERO;
 @Slf4j
 public class MapView extends Region
   {
+    /** Behaviour that does nothing. @since 1.0-ALPHA-4 */
+    public static final BiConsumer<MapView, InputEvent> DO_NOTHING = (_1, _2) -> {};
+
+    /** Behaviour that re-centers the map on the point where the mouse is. @since 1.0-ALPHA-4 */
+    public static final BiConsumer<MapView, InputEvent> RECENTER = MapView::recenter;
+
+    /** Behaviour that zooms the map on the point where the mouse is. @since 1.0-ALPHA-4 */
+    public static final BiConsumer<MapView, InputEvent> ZOOM = MapView::zoom;
+
+    /** Behaviour that translates the map of the same amount of mouse drag. @since 1.0-ALPHA-4 */
+    public static final BiConsumer<MapView, InputEvent> TRANSLATE = MapView::translate;
+
     private static final int DEFAULT_TILE_POOL_SIZE = 10;
     private static final int DEFAULT_TILE_QUEUE_CAPACITY = 1000;
     private static final OpenStreetMapTileSource DEFAULT_TILE_SOURCE = new OpenStreetMapTileSource();
@@ -264,13 +296,21 @@ public class MapView extends Region
     @Nonnull
     private final TileCache tileCache;
 
-    /** Whether double click re-centers the map to the clicked point. */
+    /** What to do in case of single click. */
     @Getter @Setter
-    private boolean recenterOnDoubleClick = true;
+    private BiConsumer<MapView, InputEvent> singleClickBehaviour = DO_NOTHING;
 
-    /** Whether the vertical scroll gesture should zoom. */
+    /** What to do in case of double click. */
     @Getter @Setter
-    private boolean scrollToZoom = false;
+    private BiConsumer<MapView, InputEvent> doubleClickBehaviour = DO_NOTHING;
+
+    /** What to do in case of drag. */
+    @Getter @Setter
+    private BiConsumer<MapView, InputEvent> dragBehaviour = TRANSLATE;
+
+    /** What to do in case of scroll. */
+    @Getter @Setter
+    private BiConsumer<MapView, InputEvent> scrollBehaviour = DO_NOTHING;
 
     /** The duration of the re-centering animation. */
     @Getter @Setter
@@ -695,7 +735,7 @@ public class MapView extends Region
       {
         if (!zooming && dragging)
           {
-            translateCenter(event.getSceneX() - dragX, event.getSceneY() - dragY);
+            translate(event);
             dragX = event.getSceneX();
             dragY = event.getSceneY();
           }
@@ -706,13 +746,17 @@ public class MapView extends Region
      **********************************************************************************************************************************************************/
     private void onMouseClicked (@Nonnull final MouseEvent event)
       {
-        if (recenterOnDoubleClick && (event.getClickCount() == 2))
+        log.trace("onMouseClicked({}, {}, {})", event.getY(), event.getY(), event.getClickCount());
+
+        switch (event.getClickCount())
           {
-            final var delta = Translation.of(getWidth() / 2 - event.getX(), getHeight() / 2 - event.getY());
-            final var target = new SimpleObjectProperty<>(Translation.of(0, 0));
-            target.addListener((__, oldValue, newValue) ->
-                                       translateCenter(newValue.x() - oldValue.x(), newValue.y() - oldValue.y()));
-            animate(target, Translation.of(0, 0), delta, recenterDuration);
+            case 1:
+              singleClickBehaviour.accept(this, event);
+              break;
+
+            case 2:
+              doubleClickBehaviour.accept(this, event);
+              break;
           }
       }
 
@@ -756,13 +800,46 @@ public class MapView extends Region
      **********************************************************************************************************************************************************/
     private void onScroll (@Nonnull final ScrollEvent event)
       {
-        if (scrollToZoom)
+        log.trace("onScroll({})", event);
+        scrollBehaviour.accept(this, event);
+      }
+
+    /***********************************************************************************************************************************************************
+     * Re-centers on the point where the mouse has been clicked.
+     **********************************************************************************************************************************************************/
+    private void recenter (@Nonnull final InputEvent event)
+      {
+        if (event instanceof final MouseEvent gestureEvent)
           {
-            log.info("onScroll({})", event);
-            final var amount = -Math.signum(Math.floor(event.getDeltaY() - scroll));
-            scroll = event.getDeltaY();
+            final var delta = Translation.of(getWidth() / 2 - gestureEvent.getX(), getHeight() / 2 - gestureEvent.getY());
+            final var target = new SimpleObjectProperty<>(Translation.of(0, 0));
+            target.addListener((ignored, oldValue, newValue) -> translateCenter(newValue.x() - oldValue.x(), newValue.y() - oldValue.y()));
+            animate(target, Translation.of(0, 0), delta, recenterDuration);
+          }
+      }
+
+    /***********************************************************************************************************************************************************
+     * Zooms on the point where the mouse has been clicked.
+     **********************************************************************************************************************************************************/
+    private void zoom (@Nonnull final InputEvent event)
+      {
+        if (event instanceof final ScrollEvent scrollEvent)
+          {
+            final var amount = -Math.signum(Math.floor(scrollEvent.getDeltaY() - scroll));
+            scroll = scrollEvent.getDeltaY();
             log.debug("zoom change for scroll: {}", amount);
             zoom.set(Math.round(zoom.get() + amount));
+          }
+      }
+
+    /***********************************************************************************************************************************************************
+     * Translates the map.
+     **********************************************************************************************************************************************************/
+    private void translate (@Nonnull final InputEvent event)
+      {
+        if (event instanceof final MouseEvent mouseEvent)
+          {
+            translateCenter(mouseEvent.getSceneX() - dragX, mouseEvent.getSceneY() - dragY);
           }
       }
 

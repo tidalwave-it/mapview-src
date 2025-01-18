@@ -306,7 +306,7 @@ public class MapViewTest extends TestNGApplicationTest
     private static Condition<MapCoordinates> practicallyEqualsTo (@Nonnull final MapCoordinates expected)
       {
         return new Condition<>(a -> Math.abs(a.latitude() - expected.latitude()) + Math.abs(a.longitude() - expected.longitude()) < 1E-5,
-                               "Not equal to " + expected);
+                               "practically equals to " + expected);
       }
 
     /**********************************************************************************************************************************************************/

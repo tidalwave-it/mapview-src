@@ -26,7 +26,9 @@
 package it.tidalwave.mapviewer.javafx;
 
 import jakarta.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -41,7 +43,9 @@ import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -73,6 +77,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import static org.apiguardian.api.API.Status.STABLE;
 import static java.lang.Double.doubleToLongBits;
+import static javafx.collections.FXCollections.observableList;
 import static javafx.util.Duration.ZERO;
 
 /***************************************************************************************************************************************************************
@@ -243,6 +248,9 @@ public class MapView extends Region
     /** The rectangular area in the view. */
     @Nonnull
     private final SimpleObjectProperty<MapArea> area;
+
+    /** The list of names of overlays. */
+    private final SimpleListProperty<String> overlayNamesProperty = new SimpleListProperty<>(observableList(new ArrayList<>()));
 
     /** The model for this control. */
     @Nonnull
@@ -560,6 +568,7 @@ public class MapView extends Region
     public void addOverlay (@Nonnull final String name, @Nonnull final Consumer<OverlayHelper> creator)
       {
         tileGrid.addOverlay(name, creator);
+        overlayNamesProperty.add(name);
       }
 
     /***********************************************************************************************************************************************************
@@ -569,6 +578,7 @@ public class MapView extends Region
     public void removeOverlay (@Nonnull final String name)
       {
         tileGrid.removeOverlay(name);
+        overlayNamesProperty.remove(name);
       }
 
     /***********************************************************************************************************************************************************
@@ -577,6 +587,27 @@ public class MapView extends Region
     public void removeAllOverlays()
       {
         tileGrid.removeAllOverlays();
+        overlayNamesProperty.clear();
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return a list of overlay names}.
+     * @since   1.0-ALPHA-3
+     **********************************************************************************************************************************************************/
+    @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP")
+    public final ReadOnlyListProperty<String> getOverlayNamesProperty()
+      {
+        return overlayNamesProperty;
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return a list of overlay names}.
+     * @since   1.0-ALPHA-3
+     **********************************************************************************************************************************************************/
+    @Nonnull
+    public final List<String> getOverlayNames()
+      {
+        return overlayNamesProperty.get();
       }
 
     /***********************************************************************************************************************************************************

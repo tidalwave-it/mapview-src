@@ -178,6 +178,68 @@ public class MapViewTest extends TestNGApplicationTest
 
     /**********************************************************************************************************************************************************/
     @Test(groups = "display")
+    public void test_addOverlay()
+      {
+        // when
+        runLaterAndWait(() ->
+          {
+            underTest.addOverlay("overlay1", ignored -> {});
+            underTest.addOverlay("overlay2", ignored -> {});
+          });
+        // then
+        assertThat(underTest.getOverlayNames()).contains("overlay1", "overlay2");
+      }
+
+    /**********************************************************************************************************************************************************/
+    @Test(groups = "display")
+    public void test_removeOverlay()
+      {
+        // given
+        runLaterAndWait(() ->
+          {
+            underTest.addOverlay("overlay1", ignored -> {});
+            underTest.addOverlay("overlay2", ignored -> {});
+          });
+        // when
+        runLaterAndWait(() -> underTest.removeOverlay("overlay1"));
+        // then
+        assertThat(underTest.getOverlayNames()).contains("overlay2");
+      }
+
+    /**********************************************************************************************************************************************************/
+    @Test(groups = "display")
+    public void test_removeAllOverlays()
+      {
+        // given
+        runLaterAndWait(() ->
+          {
+            underTest.addOverlay("overlay1", ignored -> {});
+            underTest.addOverlay("overlay2", ignored -> {});
+          });
+        // when
+        runLaterAndWait(() -> underTest.removeAllOverlays());
+        // then
+        assertThat(underTest.getOverlayNames()).isEmpty();
+      }
+
+    /**********************************************************************************************************************************************************/
+    @Test(groups = "display")
+    public void test_overlay()
+      {
+        // given
+        runLaterAndWait(() ->
+          {
+            underTest.setCenter(MapCoordinates.of(44.5, 11));
+            underTest.setZoom(7);
+          });
+        // when
+        runLaterAndWait(() -> underTest.addOverlay("test", MapViewTest::createOverlay));
+        // then
+        assertThat(underTest.getOverlayNames()).contains("test");
+      }
+
+    /**********************************************************************************************************************************************************/
+    @Test(groups = "display")
     public void test_play_around()
       {
         // given

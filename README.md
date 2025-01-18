@@ -24,8 +24,8 @@ To get started, look at the example in the code and the
 To run the example launch:
 
 ```shell
-mvn install
-mvn -f modules/Example/pom.xml exec:java
+mvn install -DskipTests
+mvn -f modules/Example/pom.xml -Pjavafx-run
 ```
 
 As an historical note, MapView has been derived by Windrose, an old open source GPS navigation project for Java Mobile developed by the same author between
@@ -78,4 +78,5 @@ Additional Resources
 
 * [Issue tracking](http://services.tidalwave.it/jira/browse/MV)
 * [Continuous Integration](http://services.tidalwave.it/ci/view/MapView)
+* [Sonar](https://sonarcloud.io/summary/overall?id=tidalwave_mapview-src&branch=master)
 * [Tidalwave Homepage](http://tidalwave.it)

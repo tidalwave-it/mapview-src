@@ -43,8 +43,8 @@
 
     <properties>
         <jpx.version>3.2.0</jpx.version>
-        <tft.javafx.modules>javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.web</tft.javafx.modules>
-        <tft.mainClass>it.tidalwave.mapview.javafx.example.MapViewExampleApplication</tft.mainClass>
+        <tft.mainModule>it.tidalwave.mapview.example</tft.mainModule>
+        <tft.mainClass>it.tidalwave.mapview.example/it.tidalwave.mapview.javafx.example.MapViewExampleApplication</tft.mainClass>
     </properties>
 
     <dependencies>

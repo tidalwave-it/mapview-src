@@ -49,6 +49,8 @@
         <thesefoolishthings.version>4.0-ALPHA-2</thesefoolishthings.version>
         <tft.test.maxMemory>1024M</tft.test.maxMemory>
         <tft.testfx-monocle.vmOptions>-Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dheadless.geometry=1600x1200-32</tft.testfx-monocle.vmOptions>
+        <tft.modulePathInTests>false</tft.modulePathInTests>
+        <tft.javac.xlint>-Xlint:all,-exports,-missing-explicit-ctor</tft.javac.xlint>
     </properties>
 
     <dependencyManagement>
@@ -99,12 +101,6 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.findbugs</groupId>
-                    <artifactId>jsr305</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Test dependencies -->
@@ -170,7 +166,6 @@
                                     <excludes combine.children="append">
                                         <exclude>javax.annotation:javax.annotation-api</exclude>
                                         <exclude>javax.inject:javax.inject</exclude>
-                                        <exclude>com.google.code.findbugs:jsr305</exclude>
                                     </excludes>
                                 </bannedDependencies>
                             </rules>
@@ -178,6 +173,18 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <annotationProcessorPath>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </annotationProcessorPath>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>

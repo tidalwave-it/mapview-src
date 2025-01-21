@@ -34,7 +34,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import it.tidalwave.mapviewer.javafx.TestNGApplicationTest;
+import it.tidalwave.mapview.javafx.TestNGApplicationTest;
 import org.testfx.api.FxRobot;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;

@@ -37,17 +37,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-public class MercatorProjectionTest
+public class WGS84PseudoMercatorProjectionTest
   {
     @Test(dataProvider = "coordinates")
     public void test_coordinatesToMapPoint (final int tileSize, final int zoom, final MapCoordinates coordinates, final MapPoint point)
       {
         // given
-        final var underTest = new MercatorProjection(tileSize);
+        final var underTest = new WGS84PseudoMercatorProjection(tileSize);
         // when
-        final var result = underTest.coordinatesToMapPoint(coordinates, zoom);
+        final var actual = underTest.coordinatesToMapPoint(coordinates, zoom);
         // then
-        assertThat(distance(result, point)).isLessThan(1E-2);
+        assertThat(distance(actual, point)).withFailMessage("actual: %s, expected: %s", actual, point).isLessThan(1E-2);
       }
 
     /**********************************************************************************************************************************************************/
@@ -55,11 +55,11 @@ public class MercatorProjectionTest
     public void test_maPointToCoordinates (final int tileSize, final int zoom, final MapCoordinates coordinates, final MapPoint point)
       {
         // given
-        final var underTest = new MercatorProjection(tileSize);
+        final var underTest = new WGS84PseudoMercatorProjection(tileSize);
         // when
-        final var result = underTest.mapPointToCoordinates(point, zoom);
+        final var actual = underTest.mapPointToCoordinates(point, zoom);
         // then
-        assertThat(distance(result, coordinates)).isLessThan(1E-2);
+        assertThat(distance(actual, coordinates)).withFailMessage("actual: %s, expected: %s", actual, coordinates).isLessThan(1E-2);
       }
 
     /**********************************************************************************************************************************************************/
@@ -67,7 +67,7 @@ public class MercatorProjectionTest
     public Object[][] coordinates()
       {
         // +------------------+------------------+
-        // |[0,57]            |          [511,57]|
+        // |[0,0]             |           [512,0]|
         // |                  |                  |
         // |                  |                  |
         // |                  |                  |
@@ -77,19 +77,31 @@ public class MercatorProjectionTest
         // |                  |                  |
         // |                  |                  |
         // |                  |                  |
-        // |[0,454]           |                  |
+        // |[0,512]           |         [512,512]|
         // +------------------+------------------+
+        final var ML = 85.05112877980655; // maximum latitude allowable by this model
 
+        //@formatter:off
         return new Object[][]
           {
-            {256, 1, MapCoordinates.of(  0,    0), MapPoint.of(256.000000, 256.000000) },
-            {256, 1, MapCoordinates.of( 45,   45), MapPoint.of(320.000000, 184.179219) },
-            {256, 1, MapCoordinates.of( 80,    0), MapPoint.of(256.000000,  57.476812) },
-            {256, 1, MapCoordinates.of( 80,  180), MapPoint.of(512.000000,  57.476812) },
-            {256, 1, MapCoordinates.of(  0,  180), MapPoint.of(512.000000, 256.000000) },
-            {256, 1, MapCoordinates.of(  0, -180), MapPoint.of(  0.000000, 256.000000) },
-            {256, 1, MapCoordinates.of( 80, -180), MapPoint.of(  0.000000,  57.476812) },
-            {256, 1, MapCoordinates.of(-80, -180), MapPoint.of(  0.000000, 454.523188) },
+            { 256, 1, MapCoordinates.of(  0,    0), MapPoint.of( 256.000000,  256.000000) },
+            { 256, 1, MapCoordinates.of( 45,   45), MapPoint.of( 320.000000,  184.179219) },
+            { 256, 1, MapCoordinates.of( ML,    0), MapPoint.of( 256.000000,    0.000000) },
+            { 256, 1, MapCoordinates.of( ML,  180), MapPoint.of( 512.000000,    0.000000) },
+            { 256, 1, MapCoordinates.of(  0,  180), MapPoint.of( 512.000000,  256.000000) },
+            { 256, 1, MapCoordinates.of(  0, -180), MapPoint.of(   0.000000,  256.000000) },
+            { 256, 1, MapCoordinates.of( ML, -180), MapPoint.of(   0.000000,    0.000000) },
+            { 256, 1, MapCoordinates.of(-ML, -180), MapPoint.of(   0.000000,  512.000000) },
+
+            { 256, 2, MapCoordinates.of(  0,    0), MapPoint.of( 512.000000,  512.000000) },
+            { 256, 2, MapCoordinates.of( 45,   45), MapPoint.of( 640.000000,  368.358438) },
+            { 256, 2, MapCoordinates.of( ML,    0), MapPoint.of( 512.000000,    0.000000) },
+            { 256, 2, MapCoordinates.of( ML,  180), MapPoint.of(1024.000000,    0.000000) },
+            { 256, 2, MapCoordinates.of(  0,  180), MapPoint.of(1024.000000,  512.000000) },
+            { 256, 2, MapCoordinates.of(  0, -180), MapPoint.of(   0.000000,  512.000000) },
+            { 256, 2, MapCoordinates.of( ML, -180), MapPoint.of(   0.000000,    0.000000) },
+            { 256, 2, MapCoordinates.of(-ML, -180), MapPoint.of(   0.000000, 1024.000000) },
           };
+        //@formatter:on
       }
   }

@@ -28,7 +28,7 @@ package it.tidalwave.mapview;
 import jakarta.annotation.Nonnull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import it.tidalwave.mapview.spi.MercatorProjection;
+import it.tidalwave.mapview.spi.WGS84PseudoMercatorProjection;
 import it.tidalwave.mapview.spi.TileSourceSupport;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +48,7 @@ public class OpenStreetMapTileSource extends TileSourceSupport
     
     private static final int DEFAULT_ZOOM_LEVEL = 9;
 
-    /** The pattern, in {@link String#format(String, Object...)} syntax, of the URI. */
+    /** The pattern, in {@link String#formatted(Object...)} syntax, of the URI. */
     @Nonnull
     protected final String pattern;
 
@@ -72,7 +72,7 @@ public class OpenStreetMapTileSource extends TileSourceSupport
                                        @Nonnull final String displayName,
                                        @Nonnull final String cachePrefix)
       {
-        super(new MercatorProjection(TILE_SIZE), 1, maxZoom, DEFAULT_ZOOM_LEVEL, TILE_SIZE, displayName, cachePrefix);
+        super(new WGS84PseudoMercatorProjection(TILE_SIZE), 1, maxZoom, DEFAULT_ZOOM_LEVEL, TILE_SIZE, displayName, cachePrefix);
         this.pattern = pattern;
       }
 
@@ -84,7 +84,7 @@ public class OpenStreetMapTileSource extends TileSourceSupport
       {
         try
           {
-            return new URI(String.format(pattern, zoom, column, row));
+            return new URI(pattern.formatted(zoom, column, row));
           }
         catch (URISyntaxException e)
           {

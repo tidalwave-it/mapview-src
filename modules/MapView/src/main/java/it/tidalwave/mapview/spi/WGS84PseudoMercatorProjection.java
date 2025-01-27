@@ -37,18 +37,16 @@ import static java.lang.Math.*;
 
 /***************************************************************************************************************************************************************
  *
- * An implementation of the Mercator Projection.
- * 
+ * An implementation of the <a href="https://epsg.io/3857">WGS84 Pseudo Mercator Projection (EPSG:3857)</a>.
+ *
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
 @API(status = EXPERIMENTAL)
 @RequiredArgsConstructor
-public class MercatorProjection implements Projection
+public class WGS84PseudoMercatorProjection implements Projection
   {
     private static final double EARTH_RADIUS = 6378137;
-
-    private static final double EARTH_CIRCUMFERENCE = EARTH_RADIUS * 2.0 * PI;
 
     private final int tileSize;
 
@@ -58,12 +56,10 @@ public class MercatorProjection implements Projection
     @Override @Nonnull
     public MapPoint coordinatesToMapPoint (@Nonnull final MapCoordinates coordinates, final double zoomLevel)
       {
-        final double arc = arc(zoomLevel);
+        final double pixelPerRadians = 1.0 / radiansPerPixel(zoomLevel);
         final double sinLat = sin(toRadians(coordinates.latitude()));
-        final double metersX = EARTH_RADIUS * toRadians(coordinates.longitude());
-        final double metersY = EARTH_RADIUS / 2 * log((1 + sinLat) / (1 - sinLat));
-        final double x = (EARTH_CIRCUMFERENCE / 2 + metersX) / arc;
-        final double y = (EARTH_CIRCUMFERENCE / 2 - metersY) / arc;
+        final double y = (PI - 0.5 * log((1 + sinLat) / (1 - sinLat))) * pixelPerRadians;
+        final double x = (PI + toRadians(coordinates.longitude())) * pixelPerRadians;
         return MapPoint.of(x, y);
       }
 
@@ -73,12 +69,10 @@ public class MercatorProjection implements Projection
     @Override @Nonnull @SuppressFBWarnings("FL_FLOATS_AS_LOOP_COUNTERS")
     public MapCoordinates mapPointToCoordinates (@Nonnull final MapPoint mapPoint, final double zoomLevel)
       {
-        final double arc = arc(zoomLevel);
-        final double metersX = mapPoint.x() * arc - EARTH_CIRCUMFERENCE / 2;
-        final double metersY = EARTH_CIRCUMFERENCE / 2 - mapPoint.y() * arc;
-        final double exp = exp(metersY / (EARTH_RADIUS / 2));
-        double lon = toDegrees(metersX / EARTH_RADIUS);
+        final double radiansPerPixel = radiansPerPixel(zoomLevel);
+        final double exp = exp(2 * (PI - mapPoint.y() * radiansPerPixel));
         final double lat = toDegrees(asin((exp - 1) / (exp + 1)));
+        double lon = toDegrees(mapPoint.x() * radiansPerPixel - PI);
 
         while (lon <= -180)
           {
@@ -99,15 +93,15 @@ public class MercatorProjection implements Projection
     @Override
     public final double metersPerPixel (@Nonnull final MapCoordinates coordinates, final double zoomLevel)
       {
-        return arc(zoomLevel) * cos(toRadians(coordinates.latitude()));
+        return EARTH_RADIUS * radiansPerPixel(zoomLevel) * cos(toRadians(coordinates.latitude()));
       }
     
     /***********************************************************************************************************************************************************
-     * {@return the arc length, in meters, that corresponds to a tile}.
+     * {@return the angle corresponding to a pixel}.
      * @param   zoomLevel   the zoom level
      **********************************************************************************************************************************************************/
-    private double arc (final double zoomLevel)
+    private double radiansPerPixel (final double zoomLevel)
       {
-        return EARTH_CIRCUMFERENCE / (pow(2, zoomLevel) * tileSize);
+        return 2.0 * PI / (pow(2, zoomLevel) * tileSize);
       }
   }

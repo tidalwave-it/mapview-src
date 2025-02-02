@@ -151,10 +151,10 @@ public class MapViewExampleController
         slZoom.minProperty().bind(mapView.minZoomProperty());
         slZoom.maxProperty().bind(mapView.maxZoomProperty());
         slZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
-        mapView.centerProperty().addListener((_1, _2, coordinates) -> lbCenterCoordinates.setText(coordinates.toString()));
+        mapView.centerProperty().addListener((_1, _2, coordinates) -> lbCenterCoordinates.setText(coordinates.toFormattedString()));
         mapView.zoomProperty().addListener((_1, _2, zoom) -> lbZoom.setText(Integer.toString(zoom.intValue())));
-        mapView.areaProperty().addListener((_1, _2, area) -> lbArea.setText(area.toString()));
-        mapView.mouseCoordinatesProperty().addListener((_1, _2, coordinates) -> lbCoordinates.setText(coordinates.toString()));
+        mapView.areaProperty().addListener((_1, _2, area) -> lbArea.setText(area.toFormattedString()));
+        mapView.mouseCoordinatesProperty().addListener((_1, _2, coordinates) -> lbCoordinates.setText(coordinates.toFormattedString()));
         btZoomIn.setOnAction(event -> mapView.setZoom(mapView.getZoom() + 1));
         btZoomOut.setOnAction(event -> mapView.setZoom(mapView.getZoom() - 1));
         btReset.setOnAction(event -> { mapView.setCenter(START); mapView.setZoom(START_ZOOM); });

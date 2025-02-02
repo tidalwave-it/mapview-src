@@ -56,6 +56,16 @@ public class MapCoordinates
     @Override @Nonnull
     public String toString()
       {
+        return "(%s, %s)".formatted(latitude, longitude);
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return a formatted string with 6 decimals}.
+     * @since     1.0-ALPHA-4
+     **********************************************************************************************************************************************************/
+    @Nonnull
+    public String toFormattedString()
+      {
         return "(%.6f, %.6f)".formatted(latitude, longitude);
       }
   }

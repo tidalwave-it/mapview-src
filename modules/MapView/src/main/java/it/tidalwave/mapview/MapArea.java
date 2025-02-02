@@ -131,6 +131,16 @@ public class MapArea
     @Override @Nonnull
     public String toString()
       {
+        return String.format("(n=%s, e=%s, s=%s, w=%s)", north, east, south, west);
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return a formatted string with 6 decimals}.
+     * @since   1.0-ALPHA-4
+     **********************************************************************************************************************************************************/
+    @Nonnull
+    public String toFormattedString()
+      {
         return String.format("(n=%.6f, e=%.6f, s=%.6f, w=%.6f)", north, east, south, west);
       }
 

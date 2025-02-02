@@ -25,55 +25,34 @@
  */
 package it.tidalwave.mapview;
 
-import jakarta.annotation.Nonnull;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /***************************************************************************************************************************************************************
  *
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-public class MapAreaTest
+public class MapCoordinatesTest
   {
-    private MapArea underTest;
+    private MapCoordinates underTest;
 
     @BeforeMethod
     public void setup()
       {
-        underTest = MapArea.of(1.0/3.0, 2.0/3.0, -5.0/3.0, -7.0/3.0);
+        underTest = MapCoordinates.of(1.0/3.0, 1.0/3.0);
       }
 
     @Test
     public void testTestToString()
       {
-        assertThat(underTest).hasToString("(n=0.3333333333333333, e=0.6666666666666666, s=-1.6666666666666667, w=-2.3333333333333335)");
+        assertThat(underTest).hasToString("(0.3333333333333333, 0.3333333333333333)");
       }
 
     @Test
     public void testToFormattedString()
       {
-        assertThat(underTest.toFormattedString()).isEqualTo("(n=0.333333, e=0.666667, s=-1.666667, w=-2.333333)");
-      }
-
-    @Test(dataProvider = "areas")
-    public void test_getCenter (@Nonnull final MapArea underTest, @Nonnull final MapCoordinates expectedCenter)
-      {
-        final var center = underTest.getCenter();
-        assertThat(center).isEqualTo(expectedCenter);
-      }
-
-    @DataProvider
-    private static Object[][] areas()
-      {
-        return new Object[][]
-          {
-            { MapArea.of(50,    8, 40,   4), MapCoordinates.of(45,    6) },
-            { MapArea.of(60, -150, 50, 150), MapCoordinates.of(55,  180) },
-            { MapArea.of(60, -150, 50, 160), MapCoordinates.of(55, -175) },
-            { MapArea.of(60, -160, 50, 150), MapCoordinates.of(55,  175) },
-          };
+        assertThat(underTest.toFormattedString()).isEqualTo("(0.333333, 0.333333)");
       }
   }

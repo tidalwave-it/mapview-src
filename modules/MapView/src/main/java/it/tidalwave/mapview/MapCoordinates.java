@@ -56,6 +56,6 @@ public class MapCoordinates
     @Override @Nonnull
     public String toString()
       {
-        return String.format("(%.6f, %.6f)", latitude, longitude);
+        return "(%.6f, %.6f)".formatted(latitude, longitude);
       }
   }

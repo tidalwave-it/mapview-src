@@ -146,7 +146,7 @@ public class MapViewModelTest
         underTest.setCenterAndZoom(center, zoomLevel);
         final var list = new ArrayList<String>();
         // when
-        underTest.iterateOnGrid((pos, url) -> list.add(String.format("(%d, %d) - %s", pos.column(), pos.row(), url)));
+        underTest.iterateOnGrid((pos, url) -> list.add("(%d, %d) - %s".formatted(pos.column(), pos.row(), url)));
         // then
         assertThat(String.join("\n", list) + "\n").isEqualTo(expectedGrid);
       }
@@ -196,7 +196,7 @@ public class MapViewModelTest
         underTest.setCenterAndZoom(center, zoomLevel);
         final var list = new ArrayList<String>();
         // when
-        underTest.iterateOnGrid((pos, url) -> list.add(String.format("(%d, %d) - %s", pos.column(), pos.row(), url)));
+        underTest.iterateOnGrid((pos, url) -> list.add("(%d, %d) - %s".formatted(pos.column(), pos.row(), url)));
         // then
         assertThat(String.join("\n", list) + "\n").isEqualTo(expectedGrid);
       }

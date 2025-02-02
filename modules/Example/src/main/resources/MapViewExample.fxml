@@ -11,56 +11,47 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.tidalwave.mapview.javafx.example.MapViewExampleController">
-   <children>
-        <AnchorPane fx:id="apAnchorPane" pickOnBounds="false" prefHeight="400.0" prefWidth="600.0">
-        </AnchorPane>
-      <BorderPane pickOnBounds="false" prefHeight="800.0" prefWidth="1024.0" stylesheets="@MapViewExample.css">
-          <right>
-              <VBox alignment="TOP_CENTER" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" spacing="4.0" BorderPane.alignment="CENTER">
-                  <children>
-                      <Button fx:id="btZoomIn" alignment="CENTER" mnemonicParsing="false" text="+" />
-                      <Slider fx:id="slZoom" orientation="VERTICAL" />
-                      <Button fx:id="btZoomOut" alignment="CENTER" mnemonicParsing="false" text="-" />
-                  </children>
-               <padding>
-                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-               </padding>
-              </VBox>
-          </right>
-          <bottom>
-              <StackPane BorderPane.alignment="CENTER">
-                  <children>
-                      <ToolBar fx:id="tbToolBar" prefHeight="40.0" prefWidth="200.0">
-                          <items>
-                              <Button fx:id="btReset" mnemonicParsing="false" text="Reset" />
-                              <Button fx:id="btShowItaly" mnemonicParsing="false" text="Italy" />
-                              <Button fx:id="btShowFrance" mnemonicParsing="false" text="France" />
-                              <Button fx:id="btShowSwitzerland" mnemonicParsing="false" text="Switzerland" />
-                              <Button fx:id="btShowAleutian" mnemonicParsing="false" text="Aleutian" />
-                              <Button fx:id="btZeroZero" mnemonicParsing="false" text="(0, 0)" />
-                              <Button fx:id="btTrack" mnemonicParsing="false" text="Track" />
-                              <Button fx:id="btOSM" mnemonicParsing="false" text="OSM" />
-                              <Button fx:id="btOTM" mnemonicParsing="false" text="OTM" />
-                          </items>
-                      </ToolBar>
-                      <HBox alignment="CENTER_RIGHT" mouseTransparent="true" spacing="16.0">
-                          <children>
-                              <Label fx:id="lbZoom" text="5" textOverrun="CLIP" />
-                              <Label fx:id="lbCenterCoordinates" text="45.309424 11.603923" textOverrun="CLIP" />
-                              <Label fx:id="lbArea" text="45.309424 11.603923" textOverrun="CLIP" />
-                              <Label fx:id="lbCoordinates" text="45.309424 11.603923" textOverrun="CLIP" />
-                          </children>
-                          <opaqueInsets>
-                              <Insets right="16.0" />
-                          </opaqueInsets>
-                          <StackPane.margin>
-                              <Insets left="16.0" />
-                          </StackPane.margin>
-                      </HBox>
-                  </children>
-              </StackPane>
-          </bottom>
-      </BorderPane>
-   </children>
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="it.tidalwave.mapview.javafx.example.MapViewExampleController">
+    <AnchorPane fx:id="apAnchorPane" pickOnBounds="false" prefHeight="400.0" prefWidth="600.0">
+    </AnchorPane>
+    <BorderPane pickOnBounds="false" prefHeight="800.0" prefWidth="1024.0" stylesheets="@MapViewExample.css">
+        <right>
+            <VBox alignment="TOP_CENTER" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" spacing="4.0" BorderPane.alignment="CENTER">
+                <padding>
+                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                </padding>
+                <Button fx:id="btZoomIn" alignment="CENTER" mnemonicParsing="false" text="+"/>
+                <Slider fx:id="slZoom" orientation="VERTICAL"/>
+                <Button fx:id="btZoomOut" alignment="CENTER" mnemonicParsing="false" text="-"/>
+            </VBox>
+        </right>
+        <bottom>
+            <StackPane BorderPane.alignment="CENTER">
+                <ToolBar fx:id="tbToolBar" prefHeight="40.0" prefWidth="200.0">
+                    <Button fx:id="btReset" mnemonicParsing="false" text="Reset"/>
+                    <Button fx:id="btShowItaly" mnemonicParsing="false" text="Italy"/>
+                    <Button fx:id="btShowFrance" mnemonicParsing="false" text="France"/>
+                    <Button fx:id="btShowSwitzerland" mnemonicParsing="false" text="Switzerland"/>
+                    <Button fx:id="btShowAleutian" mnemonicParsing="false" text="Aleutian"/>
+                    <Button fx:id="btZeroZero" mnemonicParsing="false" text="(0, 0)"/>
+                    <Button fx:id="btTrack" mnemonicParsing="false" text="Track"/>
+                    <Button fx:id="btOSM" mnemonicParsing="false" text="OSM"/>
+                    <Button fx:id="btOTM" mnemonicParsing="false" text="OTM"/>
+                </ToolBar>
+                <HBox alignment="CENTER_RIGHT" mouseTransparent="true" spacing="16.0">
+                    <opaqueInsets>
+                        <Insets right="16.0"/>
+                    </opaqueInsets>
+                    <StackPane.margin>
+                        <Insets left="16.0"/>
+                    </StackPane.margin>
+                    <Label fx:id="lbZoom" text="5" textOverrun="CLIP"/>
+                    <Label fx:id="lbCenterCoordinates" text="45.309424 11.603923" textOverrun="CLIP"/>
+                    <Label fx:id="lbArea" text="45.309424 11.603923" textOverrun="CLIP"/>
+                    <Label fx:id="lbCoordinates" text="45.309424 11.603923" textOverrun="CLIP"/>
+                </HBox>
+            </StackPane>
+        </bottom>
+    </BorderPane>
 </StackPane>

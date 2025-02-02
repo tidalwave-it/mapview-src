@@ -743,6 +743,7 @@ public class MapView extends Region
     /***********************************************************************************************************************************************************
      * Mouse callback.
      **********************************************************************************************************************************************************/
+    @SuppressFBWarnings("SF_SWITCH_NO_DEFAULT")
     private void onMouseClicked (@Nonnull final MouseEvent event)
       {
         log.trace("onMouseClicked({}, {}, {})", event.getY(), event.getY(), event.getClickCount());

@@ -181,7 +181,7 @@ public class TileCacheTest
             final var tile = mock(AbstractTile.class);
             when(tile.getSource()).thenReturn(tileSource);
             // TODO: would be better tested by connecting to a mock server that make incoming calls stuck
-            when(tile.getUri()).thenReturn(URI.create(String.format("https://tile.openstreetmap.org/17/68647/%d.png", 47000 + i)));
+            when(tile.getUri()).thenReturn(URI.create("https://tile.openstreetmap.org/17/68647/%d.png".formatted(47000 + i)));
             when(tile.getZoom()).thenReturn(17);
             underTest.loadTileInBackground(tile);
           }

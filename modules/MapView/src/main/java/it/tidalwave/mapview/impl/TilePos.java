@@ -48,6 +48,6 @@ public class TilePos
     @Override @Nonnull
     public String toString()
       {
-        return String.format("(%d, %d)", column, row);
+        return "(%d, %d)".formatted(column, row);
       }
   }

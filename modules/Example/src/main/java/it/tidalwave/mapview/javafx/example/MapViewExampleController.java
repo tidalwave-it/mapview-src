@@ -219,12 +219,8 @@ public class MapViewExampleController
     @Nonnull
     private static Node createPoint (@Nonnull final MapView.OverlayHelper helper, @Nonnull final WayPoint wp)
       {
-        final var mapPoint = helper.toMapViewPoint(MapCoordinates.of(wp.getLatitude().doubleValue(), wp.getLongitude().doubleValue()));
-        final var node = new Circle(2.5, Color.RED);
-        node.setVisible(true);
-        node.setTranslateX(mapPoint.x());
-        node.setTranslateY(mapPoint.y());
-        return node;
+        final var point = helper.toOverlayPoint(MapCoordinates.of(wp.getLatitude().doubleValue(), wp.getLongitude().doubleValue()));
+        return new Circle(point.getX(), point.getY(), 2.5, Color.RED);
       }
 
     /***********************************************************************************************************************************************************

@@ -284,7 +284,7 @@ public class MapViewTest extends TestNGApplicationTest
     /**********************************************************************************************************************************************************/
     public static void createOverlay (@Nonnull final MapView.OverlayHelper helper)
       {
-        helper.addAll(testCoordinates().stream().map(helper::toMapViewPoint).map(p -> new Circle(p.x(), p.y(), 5, RED)).toList());
+        helper.addAll(testCoordinates().stream().map(helper::toOverlayPoint).map(p -> new Circle(p.getX(), p.getY(), 5, RED)).toList());
       }
 
     /**********************************************************************************************************************************************************/

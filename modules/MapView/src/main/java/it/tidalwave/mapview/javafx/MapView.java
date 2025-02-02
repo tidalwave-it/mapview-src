@@ -49,6 +49,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.input.InputEvent;
@@ -195,15 +196,15 @@ public class MapView extends Region
           }
 
         /*******************************************************************************************************************************************************
-         * {@return a map view point corresponding to the given coordinates}. This view point must be used to draw to the overlay.
+         * {@return a point on the overlay corresponding to the given coordinates}.
          * @param   coordinates   the coordinates
          ******************************************************************************************************************************************************/
         @Nonnull
-        public MapViewPoint toMapViewPoint (@Nonnull final MapCoordinates coordinates)
+        public Point2D toOverlayPoint (@Nonnull final MapCoordinates coordinates)
           {
             final var gridOffset = model.gridOffset();
             final var point = model.coordinatesToMapViewPoint(coordinates);
-            return MapViewPoint.of(point.x() - gridOffset.x(), point.y() - gridOffset.y());
+            return new Point2D(point.x() - gridOffset.x(), point.y() - gridOffset.y());
           }
 
         /*******************************************************************************************************************************************************

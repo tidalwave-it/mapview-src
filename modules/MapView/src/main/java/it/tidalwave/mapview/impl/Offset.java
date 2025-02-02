@@ -34,13 +34,13 @@ import lombok.experimental.Accessors;
 
 /***************************************************************************************************************************************************************
  *
- * This class represents a tile offset.
+ * This class represents an offset.
  * 
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
 @RequiredArgsConstructor(staticName = "of") @Accessors(fluent = true) @Getter @EqualsAndHashCode
-public final class TileOffset implements Cartesian
+public final class Offset implements Cartesian
   {
     private final double x;
 
@@ -52,9 +52,9 @@ public final class TileOffset implements Cartesian
      * @param   dy    the vertical translation
      **********************************************************************************************************************************************************/
     @Nonnull
-    public TileOffset translated (final double dx, final double dy)
+    public Offset translated (final double dx, final double dy)
       {
-        return new TileOffset(x + dx, y + dy);
+        return new Offset(x + dx, y + dy);
       }
 
     /***********************************************************************************************************************************************************
@@ -63,6 +63,6 @@ public final class TileOffset implements Cartesian
     @Override @Nonnull
     public String toString()
       {
-        return String.format("TileOffset(%f, %f)", x, y);
+        return "(%f, %f)".formatted(x, y);
       }
   }

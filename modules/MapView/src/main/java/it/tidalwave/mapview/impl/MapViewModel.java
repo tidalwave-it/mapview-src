@@ -128,9 +128,9 @@ public class MapViewModel
     private TilePos tileCenter;
 
     /** The offset inside the tile that corresponds to the coordinates. */
-    private TileOffset tileOffset = TileOffset.of(0.0, 0.0);
+    private Offset tileOffset = Offset.of(0.0, 0.0);
 
-    private TileOffset gridOffset = TileOffset.of(0.0, 0.0);
+    private Offset gridOffset = Offset.of(0.0, 0.0);
 
     /** How many columns in the TileGrid. */
     private int columns;
@@ -267,9 +267,9 @@ public class MapViewModel
         // both pixel and tile h-axis goes left -> right, v-axis top -> bottom
         final var tileSize = tileSource.getTileSize();
         tileCenter = TilePos.of((int)(pointCenter.x() / tileSize), (int)(pointCenter.y() / tileSize));
-        tileOffset = TileOffset.of(pointCenter.x() % tileSize, pointCenter.y() % tileSize);
-        gridOffset = TileOffset.of(-tileOffset.x() - tileSize * columns / 2.0 + mapViewWidth / 2.0 + tileSize / 2.0,
-                                   -tileOffset.y() - tileSize * rows / 2.0 + mapViewHeight / 2.0 + tileSize / 2.0);
+        tileOffset = Offset.of(pointCenter.x() % tileSize, pointCenter.y() % tileSize);
+        gridOffset = Offset.of(-tileOffset.x() - tileSize * columns / 2.0 + mapViewWidth / 2.0 + tileSize / 2.0,
+                               -tileOffset.y() - tileSize * rows / 2.0 + mapViewHeight / 2.0 + tileSize / 2.0);
         log.trace("center: {}, {} - tile center: {} - tile offset: {} - grid offset: {}", center, pointCenter, tileCenter, tileOffset, gridOffset);
       }
 

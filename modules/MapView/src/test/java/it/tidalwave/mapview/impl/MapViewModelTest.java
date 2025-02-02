@@ -85,7 +85,7 @@ public class MapViewModelTest
                                                   final MapCoordinates center,
                                                   final TilePos tileCenter,
                                                   final MapPoint pixelCenter,
-                                                  final TileOffset tileOffset)
+                                                  final Offset tileOffset)
       {
         // when
         underTest.setCenterAndZoom(center, zoomLevel);
@@ -103,7 +103,7 @@ public class MapViewModelTest
                                              final MapCoordinates center,
                                              final TilePos tileCenter,
                                              final MapPoint pixelCenter,
-                                             final TileOffset tileOffset)
+                                             final Offset tileOffset)
       {
         // when
         underTest.setCenterAndZoom(pixelCenter, zoomLevel);
@@ -124,16 +124,15 @@ public class MapViewModelTest
             // (0,0) (1,0)
             // (0,1) (1,1)
             // z  coordinates                                 tile coordinates                   pixel coordinates                   tile offset
-            {  1, MapCoordinates.of( 0,  0), TilePos.of(   1,    1), MapPoint.of(   256,    256), TileOffset.of( 0,   0) },
-            {  2, MapCoordinates.of( 0,  0), TilePos.of(   2,    2), MapPoint.of(   512,    512), TileOffset.of( 0,   0) },
-            {  7, MapCoordinates.of( 0,  0), TilePos.of(  64,   64), MapPoint.of( 16384,  16384), TileOffset.of( 0,   0) },
-            { 12, MapCoordinates.of( 0,  0), TilePos.of(2048, 2048), MapPoint.of(524288, 524288), TileOffset.of( 0,   0) },
+            {  1, MapCoordinates.of( 0,  0), TilePos.of(   1,    1), MapPoint.of(   256,    256), Offset.of( 0,   0) },
+            {  2, MapCoordinates.of( 0,  0), TilePos.of(   2,    2), MapPoint.of(   512,    512), Offset.of( 0,   0) },
+            {  7, MapCoordinates.of( 0,  0), TilePos.of(  64,   64), MapPoint.of( 16384,  16384), Offset.of( 0,   0) },
+            { 12, MapCoordinates.of( 0,  0), TilePos.of(2048, 2048), MapPoint.of(524288, 524288), Offset.of( 0,   0) },
 
-            { 12, MapCoordinates.of(45, 11), TilePos.of(2173, 1473), MapPoint.of(556328, 377199), TileOffset.of(40, 111) },
-            { 12, MapCoordinates.of(45, 45), TilePos.of(2560, 1473), MapPoint.of(655360, 377199), TileOffset.of( 0, 111) },
+            { 12, MapCoordinates.of(45, 11), TilePos.of(2173, 1473), MapPoint.of(556328, 377199), Offset.of(40, 111) },
+            { 12, MapCoordinates.of(45, 45), TilePos.of(2560, 1473), MapPoint.of(655360, 377199), Offset.of( 0, 111) },
 
-            { 18, MapCoordinates.of(44.4, 8.95), TilePos.of(137589, 94914), MapPoint.of(35222832.924444, 24298096.066372), 
-              TileOffset.of(48.924444, 112.066372) },
+            { 18, MapCoordinates.of(44.4, 8.95), TilePos.of(137589, 94914), MapPoint.of(35222832.924444, 24298096.066372), Offset.of(48.924444, 112.066372) },
           };
       }
 

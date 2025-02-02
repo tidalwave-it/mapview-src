@@ -29,6 +29,7 @@ import jakarta.annotation.Nonnull;
 import it.tidalwave.mapview.MapCoordinates;
 import it.tidalwave.mapview.Cartesian;
 import lombok.experimental.UtilityClass;
+import static java.lang.StrictMath.*;
 
 @UtilityClass
 public class Distances
@@ -46,19 +47,15 @@ public class Distances
       {
         final double earthRadius = 6371000;
 
-        final double lat1 = Math.toRadians(c1.latitude());
-        final double lon1 = Math.toRadians(c1.longitude());
-        final double lat2 = Math.toRadians(c2.latitude());
-        final double lon2 = Math.toRadians(c2.longitude());
+        final double lat1 = toRadians(c1.latitude());
+        final double lon1 = toRadians(c1.longitude());
+        final double lat2 = toRadians(c2.latitude());
+        final double lon2 = toRadians(c2.longitude());
 
         final double dlon = lon2 - lon1;
         final double dlat = lat2 - lat1;
 
-        final double a = (Math.sin(dlat / 2)) * (Math.sin(dlat / 2))
-                         + (Math.cos(lat1) * Math.cos(lat2) * (Math.sin(dlon / 2)))
-                           * (Math.cos(lat1) * Math.cos(lat2) * (Math.sin(dlon / 2)));
-        final double c = 2 * Math.asin(Math.min(1.0, Math.sqrt(a)));
-        return earthRadius * c;
+        return earthRadius * 2 * asin(min(1.0, sqrt(pow(sin(dlat / 2), 2) + pow(cos(lat1) * cos(lat2) * sin(dlon / 2), 2))));
       }
 
     /***********************************************************************************************************************************************************
@@ -66,6 +63,6 @@ public class Distances
      **********************************************************************************************************************************************************/
     public static double distance (@Nonnull final Cartesian p1, @Nonnull final Cartesian p2)
       {
-        return Math.sqrt(Math.pow(p1.x() - p2.x(), 2) + Math.pow(p1.y() - p2.y(), 2));
+        return sqrt(pow(p1.x() - p2.x(), 2) + pow(p1.y() - p2.y(), 2));
       }
   }

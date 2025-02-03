@@ -39,7 +39,7 @@
 
     <groupId>it.tidalwave.mapview</groupId>
     <artifactId>it-tidalwave-mapview</artifactId>
-    <version>1.0-ALPHA-4</version>
+    <version>1.0-ALPHA-5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MapView</name>
     <url>https://tidalwave.bitbucket.io/mapview</url>
@@ -79,7 +79,7 @@ seem to be abandoned or not working. If you need a bug fix or an enhancement, re
         <connection>scm:git:${scm.repo.readonly.url}</connection>
         <developerConnection>scm:git:${scm.repo.effective.url}</developerConnection>
         <url>${scm.repo.browse.url}</url>
-        <tag>1.0-ALPHA-4</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
@@ -111,7 +111,7 @@ seem to be abandoned or not working. If you need a bug fix or an enhancement, re
             <dependency>
                 <groupId>it.tidalwave.mapview</groupId>
                 <artifactId>mapview-javafx</artifactId>
-                <version>1.0-ALPHA-4</version>
+                <version>1.0-ALPHA-5-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

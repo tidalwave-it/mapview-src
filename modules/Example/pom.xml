@@ -32,7 +32,7 @@
     <parent>
         <groupId>it.tidalwave.mapview</groupId>
         <artifactId>it-tidalwave-mapview-modules</artifactId>
-        <version>1.0-ALPHA-4</version>
+        <version>1.0-ALPHA-5-SNAPSHOT</version>
     </parent>
 
     <artifactId>mapview-example</artifactId>

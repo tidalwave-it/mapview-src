@@ -33,7 +33,7 @@ import it.tidalwave.mapview.MapPoint;
 import it.tidalwave.mapview.OpenStreetMapTileSource;
 import it.tidalwave.mapview.TileSource;
 import lombok.extern.slf4j.Slf4j;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static it.tidalwave.mapview.impl.Distances.distance;
@@ -47,7 +47,7 @@ public class MapViewModelTest
     private MapViewModel underTest;
 
     /**********************************************************************************************************************************************************/
-    @BeforeTest
+    @BeforeMethod
     public void setup()
       {
         underTest = new MapViewModel(tileSource);

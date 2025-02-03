@@ -32,7 +32,7 @@
     <parent>
         <groupId>it.tidalwave.mapview</groupId>
         <artifactId>it-tidalwave-mapview</artifactId>
-        <version>1.0-ALPHA-4-SNAPSHOT</version>
+        <version>1.0-ALPHA-4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

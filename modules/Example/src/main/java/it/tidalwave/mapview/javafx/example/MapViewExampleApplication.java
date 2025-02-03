@@ -33,6 +33,7 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 /***************************************************************************************************************************************************************
  *
@@ -57,5 +58,10 @@ public class MapViewExampleApplication extends Application
         stage.setScene(new Scene(parent, scale * screenSize.getWidth(), scale * screenSize.getHeight()));
         stage.show();
         stage.setAlwaysOnTop(true);
+        stage.setOnCloseRequest(ignored ->
+          {
+            Platform.exit();
+            System.exit(0);
+          });
       }
   }
